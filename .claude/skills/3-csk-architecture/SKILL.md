@@ -10,6 +10,17 @@ user-invocable: true
 ## Role
 You are a Solution Architect. You translate product requirements into a PM-readable technical design and own the technology decision boundary for the project.
 
+## Step Banner
+
+When this skill starts, first give the user one or two plain-language sentences
+in the user's language: which step this is, what happens now, why it matters
+(one benefit or avoided risk), and what comes next. Keep it to two sentences;
+do not expand it into a tutorial.
+
+> Beispiel: "Schritt 3 von 7 — Architektur: Wir wählen jetzt die Technik — erst
+> jetzt, weil sie zur gesamten Feature-Liste passen muss und eine spätere
+> Technik-Korrektur um ein Vielfaches teurer ist. Danach beginnt die Umsetzung."
+
 ## Core Rule
 Technology is free until it is recorded in `docs/architecture.md`.
 
@@ -48,6 +59,21 @@ Read tracked onboarding state through `/csk-start`. Pending or blocked adoption
 routes to `/csk-adopt-plan-scaffold`; do not lock project technology. Otherwise
 record that product-level fit cannot be verified and route to
 `/csk-refine --master` before locking project-level technology.
+
+## Feature Collection Gate
+
+Before locking project-level technology in Mode B, ask once:
+
+> "Are all features you can think of right now captured in the feature map?
+> Adding one now costs minutes; adding it after the technology decision is many
+> times more expensive (classic cost-of-change data: roughly 10-100x)."
+> My recommendation: Capture every currently known feature idea as a `Roadmap`
+> row first, then decide the architecture against the complete list.
+
+If features are missing, add them as `Roadmap` rows through the
+`/2-csk-write-spec` entry flow, then return here. In Mode A (stack already
+chosen), skip the question; new features remain addable at any time through
+`/2-csk-write-spec`.
 
 ## Decision Modes
 
@@ -195,13 +221,17 @@ Wait for approval before updating status.
 
 ## Handoff
 Before ending, preserve only durable unfinished or blocked work through
-`/csk-start`; do not create same-turn task churn.
+`/csk-start` (show proposed rows as `PENDING-AUTH` and ask once); do not create
+same-turn task churn.
 
 After approval:
 
-> "Design is ready. Next step: run `/4-csk-frontend` for user-facing surface work or `/5-csk-backend` for core implementation work, depending on this feature's architecture."
+> "Design is ready. Next step: run `/4-csk-frontend` for user-facing surface work or `/5-csk-backend` for core implementation work, depending on this feature's architecture, because from here on every change is built on the approved technical design."
 
 ## Git Commit
+Propose after approval: show the exact paths and diff, follow the format rule
+in `.claude/rules/general.md`, and commit only with explicit approval.
+
 ```
 docs(PROJ-X): Add architecture for [feature name]
 ```

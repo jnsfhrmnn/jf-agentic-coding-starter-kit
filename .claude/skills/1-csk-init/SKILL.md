@@ -15,6 +15,18 @@ Act as an experienced Product Strategist and System QA thinker. Turn the user's 
 
 Do not choose implementation technology. Record fixed constraints and existing decisions, then leave open choices to `/3-csk-architecture`.
 
+## Step Banner
+
+When this skill starts, first give the user one or two plain-language sentences
+in the user's language: which step this is, what happens now, why it matters
+(one benefit or avoided risk), and what comes next. Keep it to two sentences;
+do not expand it into a tutorial.
+
+> Beispiel: "Schritt 1 von 7 — Produktdefinition: Wir klären jetzt, was die
+> Software können soll, für wen und woran wir Erfolg messen — damit wir bauen,
+> was wirklich gebraucht wird, statt einfach loszulegen. Danach schreiben wir
+> für das erste Feature eine genaue Spezifikation."
+
 ## Interview Principle
 Interview until there is a complete shared understanding.
 
@@ -239,14 +251,18 @@ Present the master feature for user review before saving. After approval, update
 
 ## Handoff
 Before ending, preserve only durable unfinished or blocked work through
-`/csk-start`; do not create a task for same-turn work. Repository files, never
-chat memory, own workflow state.
+`/csk-start` (show proposed rows as `PENDING-AUTH` and ask once); do not create
+a task for same-turn work. Repository files, never chat memory, own workflow
+state.
 
 After approval:
 
-> "Project and master product contract are ready. Next step: run `/2-csk-write-spec PROJ-X` for **[recommended first feature name]**."
+> "Project and master product contract are ready. Next step: run `/2-csk-write-spec PROJ-X` for **[recommended first feature name]**, because a precise specification is the checklist the finished software will be tested against. If more feature ideas come up, add them to the roadmap before the architecture step — additions are cheapest now."
 
 ## Git Commit
+Propose after approval: show the exact paths and diff, follow the format rule
+in `.claude/rules/general.md`, and commit only with explicit approval.
+
 ```
 feat: Initialize project and master product contract
 ```

@@ -2,6 +2,19 @@
 
 All notable public changes to this project are documented here.
 
+## 1.1.0 - 2026-07-18
+
+- Added a branch lifecycle rule: a one-time branch question before
+  implementation, checkpoint commits after verified increments, and completion
+  only through `finish-branch`.
+- Added beginner step banners: every workflow skill now opens with one or two
+  plain-language sentences explaining what happens and why.
+- Added a feature-collection gate before the architecture decision and a
+  bilingual "Why this order?" rationale to the README.
+- Clarified the commit-format rule for project-wide changes, the pull-request
+  check timeout, the evidence-record location, and the onboarding gate in the
+  implementation skills.
+
 ## 1.0.0 - 2026-07-18
 
 - Published the technology-neutral AI development starter kit for Claude Code

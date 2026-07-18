@@ -44,4 +44,4 @@
 - [ ] Verification gaps documented if commands/tools are missing.
 - [ ] Feature spec updated with implementation notes.
 - [ ] `features/INDEX.md` status updated to `In Progress`.
-- [ ] Code committed to git when requested.
+- [ ] Checkpoint commit proposed for the verified state and completed only with explicit approval.

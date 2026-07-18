@@ -11,6 +11,17 @@ Release only what QA approved, through the target and process recorded in the
 architecture. A plan, successful local build, or user request to "deploy" does
 not by itself prove release readiness or authorize external actions.
 
+## Step Banner
+
+When this skill starts, first give the user one or two plain-language sentences
+in the user's language: which step this is, what happens now, why it matters
+(one benefit or avoided risk), and what comes next. Keep it to two sentences;
+do not expand it into a tutorial.
+
+> Beispiel: "Schritt 7 von 7 — Release: Wir veröffentlichen jetzt nur, was die
+> Qualitätsprüfung bestanden hat, und sichern jeden Schritt mit Belegen und
+> einem Rückweg ab. Danach ist das Feature ausgeliefert."
+
 ## Entry contract
 
 1. Run `/csk-start` and read `.claude/rules/workflow-state.md`.
@@ -143,5 +154,6 @@ state, feature/task bookkeeping, tag state, and remaining risks. Say
 `incomplete` for partial external state.
 
 Before ending, preserve only durable unfinished or blocked work through
-`/csk-start`. If a release branch remains open after a verified release result,
-route it to `/finish-branch`.
+`/csk-start` (show proposed rows as `PENDING-AUTH` and ask once). If a release
+branch remains open after a verified release result, route it to
+`/finish-branch`.

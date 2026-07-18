@@ -24,6 +24,21 @@ Adapter-resolved paths are authoritative. Chat memory, a task's advisory
 `Expected branch`, and transported recommendations never override repository or
 Git state.
 
+## Branch lifecycle
+
+- Documentation-phase commits from `/1-csk-init`, `/2-csk-write-spec`, and
+  `/3-csk-architecture` may be proposed on the default branch; each commit still
+  requires explicit user approval.
+- Before productive implementation in `/4-csk-frontend` or `/5-csk-backend`,
+  when the live checkout is on the default branch, ask once whether to create
+  `feature/PROJ-X-<name>` (recommended) or deliberately continue on the default
+  branch. Record the choice; never switch or create branches silently.
+- After each verified increment, propose a checkpoint commit on the working
+  branch so progress survives session loss. Committing always requires explicit
+  approval; push, merge, and pull-request actions are never implied.
+- A non-default branch is completed only through `/finish-branch` after QA.
+  Passing checks never authorize commit, push, merge, tag, or cleanup.
+
 ## Feature lifecycle
 
 | Current status | Allowed next status | Normal next action |

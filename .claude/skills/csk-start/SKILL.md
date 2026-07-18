@@ -188,6 +188,11 @@ either side during the read-only start routine.
 
 ### 6. Present the board
 
+Before the board, give the user one plain-language sentence in the user's
+language, for example: "Bevor wir arbeiten, prüfe ich den gespeicherten
+Projektstand und die offenen Aufgaben, damit wir genau dort weitermachen, wo
+die letzte Session aufgehört hat."
+
 Use this compact shape:
 
 ```text
@@ -256,7 +261,9 @@ the next action that could remove it. Never mark uncertainty as completion.
    `url:<endpoint>`, or `artifact:<path>` to the helper.
 3. Commit, file, and artifact evidence must resolve locally. Test and URL
    evidence also require `--evidence-record <relative-path>` pointing to a local
-   proof file that contains the test name or URL.
+   proof file that contains the test name or URL. Store new proof files under
+   `.csk/evidence/<TASK-ID>-<short-name>.md` unless an owning source of truth
+   already holds the evidence.
 4. Preserve evidence in the owning local source of truth when one exists.
 5. Let the helper remove the row; create no archive.
 6. Check that no dependent open task was orphaned.

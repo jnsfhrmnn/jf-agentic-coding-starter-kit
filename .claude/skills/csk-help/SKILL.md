@@ -78,6 +78,10 @@ competing next commands unless the user explicitly asks for options.
 
 ## Common questions
 
+- Why this order: the numbered steps follow the classic engineering cycle —
+  requirements, then specification, then architecture, then implementation,
+  then QA against the original acceptance criteria, then release. See
+  "Why this order?" in `README.md` for the short rationale.
 - Available workflow skills: numbered skills 1–7 plus `/csk-start`,
   `/csk-adopt-plan-scaffold`, `/csk-refine`, `/csk-help`, `/finish-branch`,
   `/audit-plan-loop`, `/review-loop`, and `/claude-skill-proxy-sync`.

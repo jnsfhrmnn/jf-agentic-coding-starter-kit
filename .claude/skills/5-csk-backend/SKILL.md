@@ -14,6 +14,17 @@ The command is named `5-csk-backend` for workflow continuity, but **backend does
 
 This skill must work for small tools and large multi-module repositories.
 
+## Step Banner
+
+When this skill starts, first give the user one or two plain-language sentences
+in the user's language: which step this is, what happens now, why it matters
+(one benefit or avoided risk), and what comes next. Keep it to two sentences;
+do not expand it into a tutorial.
+
+> Beispiel: "Schritt 5 von 7 — Kern: Wir bauen jetzt die innere Logik des
+> Features — Daten, Abläufe, Verarbeitung — damit das Produkt verlässlich
+> arbeitet. Danach folgt die Qualitätsprüfung."
+
 ## What This Skill Can Cover
 
 Use this skill for any architecture-approved non-surface work, including:
@@ -55,17 +66,19 @@ If the adapter config provides alternate paths, use those paths exactly and do n
 
 ## Before Starting
 
-1. Resolve adapter config and paths.
-2. Read `CLAUDE.md` and confirm the CSK workflow is active, or confirm an adapter config exists.
-3. Read `docs/architecture.md`.
-4. Read `docs/master-feature.md`.
-5. Read `docs/engineering-principles.md`.
-6. Read `.claude/rules/workflow-state.md` and `.claude/rules/loop-policy.md`.
-7. Read `features/INDEX.md`.
-8. Read the referenced feature spec, including Tech Design.
-9. Read `.claude/rules/backend.md`, `.claude/rules/security.md`, and `.claude/rules/general.md`.
-10. Inspect the repository with `rg --files` or `git ls-files`.
-11. For large repos, identify the relevant modules, entry points, tests, build files, config files, and existing conventions before editing.
+1. Run `/csk-start` and require valid onboarding state; reconcile open durable
+   tasks before selecting new work.
+2. Resolve adapter config and paths.
+3. Read `CLAUDE.md` and confirm the CSK workflow is active, or confirm an adapter config exists.
+4. Read `docs/architecture.md`.
+5. Read `docs/master-feature.md`.
+6. Read `docs/engineering-principles.md`.
+7. Read `.claude/rules/workflow-state.md` and `.claude/rules/loop-policy.md`.
+8. Read `features/INDEX.md`.
+9. Read the referenced feature spec, including Tech Design.
+10. Read `.claude/rules/backend.md`, `.claude/rules/security.md`, and `.claude/rules/general.md`.
+11. Inspect the repository with `rg --files` or `git ls-files`.
+12. For large repos, identify the relevant modules, entry points, tests, build files, config files, and existing conventions before editing.
 
 ## Implementation Gate
 
@@ -76,6 +89,10 @@ Before productive work, verify:
 3. A feature spec, comparable plan, or explicit quick-fix waiver exists.
 4. Feature status is `Architected` or `In Progress`. `In Review` is allowed only
    for a remediation finding already documented by QA or review.
+5. The branch gate from `.claude/rules/workflow-state.md` was applied: on the
+   default branch, ask once whether to create `feature/PROJ-X-<name>`
+   (recommended) or deliberately continue there. Never create or switch
+   branches silently.
 
 If any item is missing, stop and name the missing step. A quick fix may proceed only when explicitly marked, for example: `quick fix, spec waived because ...`. Record that waiver in the feature spec or as durable local work in `tasks/INDEX.md`.
 
@@ -198,6 +215,14 @@ Summarize:
 - Any operational assumptions.
 - Any gaps that should be handled by `/6-csk-qa` or another architecture pass.
 
+### 9. Checkpoint Commit
+
+After a verified increment, propose one checkpoint commit on the working
+branch: show the exact paths and a commit message following
+`.claude/rules/general.md`, and commit only with explicit approval. This keeps
+progress safe across sessions. Push, merge, and pull-request actions stay with
+`/finish-branch`.
+
 ## Context Recovery
 
 If context was compacted:
@@ -215,15 +240,19 @@ See `checklist.md`.
 
 ## Handoff
 Before ending, preserve only durable unfinished or blocked continuation work
-through `/csk-start`; do not create same-turn task churn.
+through `/csk-start` (show proposed rows as `PENDING-AUTH` and ask once); do not
+create same-turn task churn.
 
-> "Core implementation work is done. Next step: run `/6-csk-qa` to test this feature against its acceptance criteria."
+> "Core implementation work is done. Next step: run `/6-csk-qa` to test this feature against its acceptance criteria, because only that check against the original list proves the feature is really done."
 
-After verification on a non-default branch, recommend `/finish-branch` only when
-the feature's required implementation and QA gates are complete. Do not imply
-that passing checks authorized Git mutations.
+Propose a checkpoint commit for the verified working state (with approval).
+`/finish-branch` follows only after `/6-csk-qa` reports the feature
+release-ready. Do not imply that passing checks authorized Git mutations.
 
 ## Git Commit
+
+Propose after user review: show the exact paths and diff, follow the format
+rule in `.claude/rules/general.md`, and commit only with explicit approval.
 
 ```
 feat(PROJ-X): Implement core behavior for [feature name]

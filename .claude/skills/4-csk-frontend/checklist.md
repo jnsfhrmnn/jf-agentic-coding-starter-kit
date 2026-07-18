@@ -35,4 +35,4 @@ Before marking user-facing surface work complete:
 
 ## Completion
 - [ ] User reviewed the result.
-- [ ] Code committed to git when requested.
+- [ ] Checkpoint commit proposed for the verified state and completed only with explicit approval.
