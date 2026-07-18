@@ -86,7 +86,12 @@ git clone https://github.com/jnsfhrmnn/jf-agentic-coding-starter-kit.git my-proj
 cd my-project
 git remote rename origin upstream
 git remote add origin https://github.com/YOUR-NAME/YOUR-PROJECT.git
+gh repo set-default YOUR-NAME/YOUR-PROJECT
 ```
+
+The last line matters if you use the GitHub CLI: with an `upstream` remote
+present, `gh` otherwise resolves to the template repository and could open
+pull requests there instead of in your project.
 
 #### 3. Open the repository in your coding agent
 
@@ -513,7 +518,12 @@ git clone https://github.com/jnsfhrmnn/jf-agentic-coding-starter-kit.git mein-pr
 cd mein-projekt
 git remote rename origin upstream
 git remote add origin https://github.com/DEIN-NAME/DEIN-PROJEKT.git
+gh repo set-default DEIN-NAME/DEIN-PROJEKT
 ```
+
+Die letzte Zeile ist wichtig, wenn du die GitHub CLI nutzt: Mit vorhandenem
+`upstream`-Remote löst `gh` sonst auf das Template-Repository auf und könnte
+Pull Requests dort statt in deinem Projekt eröffnen.
 
 #### 3. Repository im Coding-Agent öffnen
 

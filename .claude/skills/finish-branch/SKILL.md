@@ -65,6 +65,12 @@ template/source remote, never a publish target for project changes. If no safe
 `origin` exists, use a local integration strategy or explain that publication is
 unavailable.
 
+When using the GitHub CLI, verify that it resolves to the project `origin`
+(for example `gh repo view --json nameWithOwner`). With an `upstream` remote
+present, `gh` may silently resolve to the template repository. Pin the target
+with `--repo` on every call or `gh repo set-default` before any pull-request
+action.
+
 Choose and state one strategy:
 
 - existing repository pull-request workflow (preferred when configured);
