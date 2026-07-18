@@ -1,19 +1,7 @@
 MIT License
 
-Copyright (c) 2026 Alex Sprogis (upstream author)
-Copyright (c) 2026 Jens Fehrmann (derivative work)
-
-Upstream project: AI Coding Starter Kit
-Upstream repository: https://github.com/AlexPEClub/ai-coding-starter-kit
-
-The upstream README identifies Alex Sprogis as the author and declares the
-project to be under the MIT License. The upstream repository did not contain a
-standalone license file when this derivative repository was prepared on
-2026-07-18. The standard MIT terms are reproduced below so that the upstream
-attribution and license notice travel with redistributed copies.
-
-Original modifications in this derivative repository are offered by their
-respective copyright holders under the same MIT terms.
+Copyright (c) 2026 Alex Sprogis
+Copyright (c) 2026 Jens Fehrmann
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
