@@ -304,6 +304,19 @@ closed, or continued by another agent.
 only when it remains open across sessions, is blocked/deferred, or marks a verified
 interruption point. Short-lived same-session activity does not create noise.
 
+#### The task system in five lines
+
+- `/csk-start` opens every session: it shows the board of open tasks and
+  recommends exactly one next action; say `continue` to resume it.
+- Store durable work in plain language or with `/csk-start --add "<task>"`;
+  newly discovered follow-ups are shown as `PENDING-AUTH` and you are asked
+  once before anything is stored.
+- Record a blocker with `/csk-start --block TASK-001 --reason "<why>"`.
+- Closing requires typed evidence, for example
+  `/csk-start --close TASK-001 --evidence "commit:<sha>"` — claims without a
+  locally verifiable proof are rejected.
+- Completed rows are deleted, not archived; Git history is the audit trail.
+
 ### Safe Git and branch handling
 
 - `origin` is your project repository.
@@ -711,6 +724,21 @@ Kontextkomprimierung und Agentwechsel ohne mündliche Rekonstruktion.
 `tasks/INDEX.md` ist kein Chatprotokoll und keine beliebige Todo-Liste. Ein Task
 wird nur gespeichert, wenn er sessionsübergreifend offen, blockiert, verschoben
 oder ein nachgewiesener Unterbrechungspunkt ist.
+
+#### Das Task-System in fünf Zeilen
+
+- `/csk-start` eröffnet jede Session: Es zeigt das Board der offenen Tasks und
+  empfiehlt genau eine nächste Aktion; „weiter" setzt dort fort.
+- Dauerhafte Arbeit speicherst du in Alltagssprache oder mit
+  `/csk-start --add "<aufgabe>"`; neu entdeckte Folgearbeiten werden als
+  `PENDING-AUTH` gezeigt, und du wirst einmal gefragt, bevor etwas gespeichert
+  wird.
+- Blocker erfasst `/csk-start --block TASK-001 --reason "<grund>"`.
+- Schließen verlangt typisierte Evidence, zum Beispiel
+  `/csk-start --close TASK-001 --evidence "commit:<sha>"` — Behauptungen ohne
+  lokal prüfbaren Beleg werden abgelehnt.
+- Erledigte Zeilen werden gelöscht, nicht archiviert; die Git-Historie ist der
+  Nachweis.
 
 ### Sicheres Git- und Branch-Verhalten
 
