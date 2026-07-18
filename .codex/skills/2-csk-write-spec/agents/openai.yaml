@@ -1,0 +1,4 @@
+interface:
+  display_name: "2 CSK Write Spec"
+  short_description: "Run the repo-local 2 CSK Write Spec workflow"
+  default_prompt: "Use $2-csk-write-spec and follow its canonical repository-local Claude skill."

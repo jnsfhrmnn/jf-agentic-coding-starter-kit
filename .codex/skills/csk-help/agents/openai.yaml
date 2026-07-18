@@ -1,0 +1,4 @@
+interface:
+  display_name: "CSK Help"
+  short_description: "Run the repo-local CSK Help workflow"
+  default_prompt: "Use $csk-help and follow its canonical repository-local Claude skill."

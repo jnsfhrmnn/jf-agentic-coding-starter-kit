@@ -1,0 +1,4 @@
+interface:
+  display_name: "6 CSK QA"
+  short_description: "Run the repo-local 6 CSK QA workflow"
+  default_prompt: "Use $6-csk-qa and follow its canonical repository-local Claude skill."

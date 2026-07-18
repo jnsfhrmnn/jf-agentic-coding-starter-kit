@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "repository_role": "template",
+  "onboarding": {
+    "mode": "pending",
+    "adoption_status": "not-assessed",
+    "decided_at": null,
+    "scaffold_evidence": null
+  }
+}

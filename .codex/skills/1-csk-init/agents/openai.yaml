@@ -1,0 +1,4 @@
+interface:
+  display_name: "1 CSK Init"
+  short_description: "Run the repo-local 1 CSK Init workflow"
+  default_prompt: "Use $1-csk-init and follow its canonical repository-local Claude skill."

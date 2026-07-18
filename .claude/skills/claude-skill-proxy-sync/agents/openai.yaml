@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Skill Proxy Sync"
+  short_description: "Synchronize repo-local Claude skills to Codex"
+  default_prompt: "Use $claude-skill-proxy-sync to synchronize this repository's Claude skills into portable Codex proxies."

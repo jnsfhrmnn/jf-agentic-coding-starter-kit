@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Loop"
+  short_description: "Review deeply with authority-aware disposition"
+  default_prompt: "Use $review-loop to review the current repository artifacts, verify findings, and persist follow-ups only when repository writes are authorized."

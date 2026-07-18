@@ -1,0 +1,4 @@
+interface:
+  display_name: "Finish Branch"
+  short_description: "Safely complete and integrate a repository branch"
+  default_prompt: "Use $finish-branch to verify, commit, integrate, and safely close the current branch."

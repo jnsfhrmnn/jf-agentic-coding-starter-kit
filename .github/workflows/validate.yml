@@ -1,0 +1,64 @@
+name: Validate starter kit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.14"]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Reject non-public artifacts
+        shell: bash
+        run: |
+          if git ls-files 'docs/plans/**' 'docs/audits/**' | grep -q .; then
+            echo "Internal plans or audits are tracked."
+            exit 1
+          fi
+          if git ls-files | grep -E '(^|/)__pycache__/|\.py[co]$' >/dev/null; then
+            echo "Generated Python cache files are tracked."
+            exit 1
+          fi
+
+      - name: Compile deterministic tooling
+        run: |
+          python -m py_compile \
+            .claude/skills/csk-start/scripts/csk_start.py \
+            .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py
+
+      - name: Test startup, state, and task contracts
+        run: python .claude/skills/csk-start/scripts/test_csk_start.py
+
+      - name: Test workflow contracts
+        run: python .claude/skills/csk-start/scripts/test_workflow_contracts.py
+
+      - name: Test Claude-to-Codex proxy synchronization
+        run: python .claude/skills/claude-skill-proxy-sync/scripts/test_sync_claude_skill_proxies.py
+
+      - name: Verify generated Codex proxies are current
+        run: python .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py --repo . --json
+
+      - name: Verify distributable template state from Git HEAD
+        run: python .claude/skills/csk-start/scripts/csk_start.py --repo . state check-template-distribution

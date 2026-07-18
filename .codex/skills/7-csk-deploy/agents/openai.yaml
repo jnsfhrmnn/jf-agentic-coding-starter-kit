@@ -1,0 +1,4 @@
+interface:
+  display_name: "7 CSK Deploy"
+  short_description: "Run the repo-local 7 CSK Deploy workflow"
+  default_prompt: "Use $7-csk-deploy and follow its canonical repository-local Claude skill."

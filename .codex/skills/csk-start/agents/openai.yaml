@@ -1,0 +1,4 @@
+interface:
+  display_name: "CSK Start"
+  short_description: "Offene Aufgaben prüfen und Arbeit fortsetzen"
+  default_prompt: "Use $csk-start to inspect this repository, triage open work, and recommend the safest next action."

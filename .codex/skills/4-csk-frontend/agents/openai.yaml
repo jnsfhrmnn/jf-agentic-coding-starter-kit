@@ -1,0 +1,4 @@
+interface:
+  display_name: "4 CSK Frontend"
+  short_description: "Run the repo-local 4 CSK Frontend workflow"
+  default_prompt: "Use $4-csk-frontend and follow its canonical repository-local Claude skill."

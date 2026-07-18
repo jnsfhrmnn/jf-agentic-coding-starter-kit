@@ -1,0 +1,4 @@
+interface:
+  display_name: "CSK Adopt Plan Scaffold"
+  short_description: "Build a sourced feature scaffold from existing plans"
+  default_prompt: "Use $csk-adopt-plan-scaffold to inventory this repository and create a provisional, plan-linked feature scaffold before continuing the CSK workflow."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Plan Loop"
+  short_description: "Iteratively build and harden non-trivial work"
+  default_prompt: "Use $audit-plan-loop to build this deliverable through an evidence-based audit, plan, refine, and log cycle."

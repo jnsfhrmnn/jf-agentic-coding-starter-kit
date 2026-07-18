@@ -1,0 +1,4 @@
+interface:
+  display_name: "3 CSK Architecture"
+  short_description: "Run the repo-local 3 CSK Architecture workflow"
+  default_prompt: "Use $3-csk-architecture and follow its canonical repository-local Claude skill."

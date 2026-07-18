@@ -1,0 +1,4 @@
+interface:
+  display_name: "5 CSK Backend"
+  short_description: "Run the repo-local 5 CSK Backend workflow"
+  default_prompt: "Use $5-csk-backend and follow its canonical repository-local Claude skill."

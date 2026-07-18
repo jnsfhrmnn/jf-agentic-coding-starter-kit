@@ -1,0 +1,4 @@
+interface:
+  display_name: "CSK Refine"
+  short_description: "Run the repo-local CSK Refine workflow"
+  default_prompt: "Use $csk-refine and follow its canonical repository-local Claude skill."

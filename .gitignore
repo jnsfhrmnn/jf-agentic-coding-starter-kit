@@ -1,0 +1,64 @@
+# generic dependency/vendor folders
+vendor/
+deps/
+
+# generic build and release outputs
+build/
+dist/
+out/
+target/
+release/
+
+# test and coverage outputs
+coverage/
+test-results/
+.coverage
+htmlcov/
+.pytest_cache/
+
+# local env and secrets
+.env
+.env.*
+!.env.local.example
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc
+.pypirc
+.netrc
+secrets/
+credentials/
+
+# editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Codex personal sessions and local overrides
+.codex/sessions/
+.codex/logs/
+.codex/*.local.*
+
+# private working material that is not part of the distributable kit
+docs/plans/
+docs/audits/
+docs/private/
+private/
+.private/
+
+# generic generated caches
+.cache/
+__pycache__/
+*.py[cod]
+*.log
+tmp/
+.tmp/
+
+# repository-local CSK mutation locks and temporary files
+.csk/*.lock
+.csk/*.tmp
