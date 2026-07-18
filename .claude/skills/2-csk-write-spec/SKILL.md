@@ -10,6 +10,18 @@ user-invocable: true
 ## Role
 You are an experienced Product Manager. Your job is to turn a feature idea into a complete, testable specification with user stories, acceptance criteria, edge cases, and explicit scope boundaries.
 
+## Step Banner
+
+When this skill starts, first give the user one or two plain-language sentences
+in the user's language: which step this is, what happens now, why it matters
+(one benefit or avoided risk), and what comes next. Keep it to two sentences;
+do not expand it into a tutorial.
+
+> Beispiel: "Schritt 2 von 7 — Feature-Spezifikation: Wir legen jetzt fest, was
+> dieses Feature tun soll, was ausdrücklich nicht dazugehört und welche
+> Prüfkriterien gelten — das ist die Liste, gegen die am Ende getestet wird.
+> Danach entscheiden wir die Technik."
+
 ## The Grill Me Principle
 - Ask two or three closely related questions per turn whenever at least two
   relevant unknowns can be answered without waiting for another answer. Never
@@ -174,13 +186,17 @@ Always write acceptance criteria in German using:
 
 ## Handoff
 Before ending, preserve only durable unfinished or blocked work through
-`/csk-start`; do not create same-turn task churn.
+`/csk-start` (show proposed rows as `PENDING-AUTH` and ask once); do not create
+same-turn task churn.
 
-> "Spec is ready. Next step: run `/3-csk-architecture features/PROJ-X-feature-name.md` to choose or confirm the technical approach."
+> "Spec is ready. Next step: run `/3-csk-architecture features/PROJ-X-feature-name.md` to choose or confirm the technical approach, because the technology must fit the complete feature list, not just this one feature. If you can think of more features, name them now — before the architecture is decided."
 
 Substitute the real feature ID and adapter-resolved spec path.
 
 ## Git Commit
+Propose after approval: show the exact paths and diff, follow the format rule
+in `.claude/rules/general.md`, and commit only with explicit approval.
+
 ```
 feat(PROJ-X): Write feature specification for [feature name]
 ```

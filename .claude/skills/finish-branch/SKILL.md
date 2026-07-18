@@ -9,6 +9,11 @@ Complete one Git branch with evidence and explicit action boundaries. Start
 read-only. Never equate "tests passed" with permission to commit, push, merge,
 open a pull request, tag, or delete a branch.
 
+When this skill starts, first give the user one or two plain-language sentences
+in the user's language explaining the step, for example: "Wir schließen jetzt
+den Arbeits-Branch kontrolliert ab — committen, prüfen, zusammenführen — damit
+nichts Ungeprüftes auf dem Hauptstand landet."
+
 ## Entry contract
 
 - The repository onboarding gate passes.
@@ -110,8 +115,9 @@ user authorizes only part, perform only that part and report the remaining state
    tracking and the pushed SHA.
 5. Create or reuse one pull request when that is the chosen strategy. Record its
    URL and actual state.
-6. Wait for required checks with a bounded timeout. A timeout or unavailable
-   check is not success.
+6. Wait for required checks with a bounded timeout: default 15 minutes, or the
+   repository's documented CI budget when one exists. On expiry, report the
+   actual check state and stop; a timeout or unavailable check is not success.
 7. Merge only after required checks and review gates pass; verify the merge SHA
    is reachable from the target branch.
 8. For local integration, inspect the target worktree, update it safely, perform

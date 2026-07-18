@@ -71,6 +71,24 @@ class WorkflowContractTests(unittest.TestCase):
         ):
             self.assertIn(f"`{status}`", workflow)
 
+    def test_branch_lifecycle_banners_and_feature_gate_are_present(self) -> None:
+        workflow = read(".claude/rules/workflow-state.md")
+        self.assertIn("## Branch lifecycle", workflow)
+        for number, name in (
+            (1, "init"), (2, "write-spec"), (3, "architecture"),
+            (4, "frontend"), (5, "backend"), (6, "qa"), (7, "deploy"),
+        ):
+            with self.subTest(skill=f"{number}-csk-{name}"):
+                skill = read(f".claude/skills/{number}-csk-{name}/SKILL.md")
+                self.assertIn("## Step Banner", skill)
+        architecture = read(".claude/skills/3-csk-architecture/SKILL.md")
+        self.assertIn("## Feature Collection Gate", architecture)
+        for name in ("4-csk-frontend", "5-csk-backend"):
+            with self.subTest(skill=name):
+                skill = read(f".claude/skills/{name}/SKILL.md")
+                self.assertIn("branch gate", skill)
+                self.assertIn("Checkpoint Commit", skill)
+
     def test_release_orders_both_reviews_around_external_action(self) -> None:
         deploy = read(".claude/skills/7-csk-deploy/SKILL.md")
         readiness = deploy.index("Phase 2: Readiness review")

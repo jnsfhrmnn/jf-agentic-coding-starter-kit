@@ -185,6 +185,21 @@ Supporting skills:
 | `/claude-skill-proxy-sync` | `$claude-skill-proxy-sync` | Create/update Codex proxies for your own local Claude skills |
 | `/csk-help` | `$csk-help` | Explain current state and the safest next step |
 
+### Why this order? Classic software engineering, applied
+
+The numbered steps follow the classic engineering cycle: capture requirements
+first, specify features with acceptance criteria, then decide the architecture,
+then build, then verify. Two proven reasons drive this order. First,
+architecture is determined by the whole requirement set—deciding technology
+against the complete feature list avoids expensive rework, because a change
+that costs minutes during planning costs many times more after the technology
+decision (Boehm's classic cost-of-change data: roughly 10–100x). That is why
+the kit asks, before the architecture step, whether all currently known
+features are captured. Second, QA at the end verifies the software against the
+same acceptance criteria written in step 2—so "done" is an objective,
+traceable check instead of a feeling. Every numbered workflow skill also opens
+with one or two plain sentences explaining why its step happens now.
+
 ### Why this also professionalizes an existing project
 
 You do **not** need to restart or rewrite a working codebase. The adoption path is
@@ -288,6 +303,8 @@ interruption point. Short-lived same-session activity does not create noise.
 
 - `origin` is your project repository.
 - `upstream` is the starter-kit source and is never an implicit push target.
+- Before implementation starts on the default branch, the workflow asks once
+  whether to create a feature branch.
 - Passing tests does not authorize commit, push, PR, merge, tag, deploy, or delete.
 - `finish-branch` checks dirty state, worktrees, active Git operations, base drift,
   tests, conflicts, partial pushes, and integration reachability.
@@ -573,6 +590,22 @@ Session starten
 Die Skill-Tabelle im englischen Abschnitt gilt identisch: Claude nutzt `/...`,
 Codex `$...`. Mit `csk-help` erhältst du jederzeit Status und nächsten Schritt.
 
+### Warum diese Reihenfolge? Klassische Softwaretechnik, angewendet
+
+Die nummerierten Schritte folgen dem klassischen Entwicklungszyklus: erst
+Anforderungen erfassen, dann Features mit Prüfkriterien spezifizieren, dann die
+Architektur entscheiden, dann bauen, dann prüfen. Zwei bewährte Gründe tragen
+diese Reihenfolge. Erstens: Die Architektur richtet sich nach der gesamten
+Anforderungsmenge — wer die Technik gegen die vollständige Feature-Liste
+entscheidet, vermeidet teure Umbauten, denn eine Änderung, die in der Planung
+Minuten kostet, kostet nach der Technik-Entscheidung ein Vielfaches (Boehms
+klassische Änderungskosten-Daten: grob 10–100x). Deshalb fragt das Kit vor dem
+Architektur-Schritt, ob alle bekannten Features erfasst sind. Zweitens: Die
+Qualitätsprüfung am Ende testet gegen genau die Prüfkriterien aus Schritt 2 —
+„fertig" ist damit eine objektive, nachvollziehbare Prüfung statt eines
+Gefühls. Jeder nummerierte Workflow-Skill beginnt zudem mit ein bis zwei
+Sätzen, warum sein Schritt gerade jetzt kommt.
+
 ### Warum das Kit auch bestehende Projekte professionalisiert
 
 Du musst funktionierenden Code **nicht** neu beginnen oder umschreiben. Der
@@ -673,6 +706,8 @@ oder ein nachgewiesener Unterbrechungspunkt ist.
 
 - `origin` ist dein Projekt-Repository.
 - `upstream` ist die Starter-Kit-Quelle und kein implizites Push-Ziel.
+- Vor Implementierungsbeginn auf dem Default-Branch fragt der Workflow einmal,
+  ob ein Feature-Branch angelegt werden soll.
 - Grüne Tests erlauben nicht automatisch Commit, Push, PR, Merge, Tag oder Deploy.
 - `finish-branch` prüft Dirty State, Worktrees, laufende Git-Operationen, Base Drift,
   Tests, Konflikte, Teil-Pushes und tatsächliche Integration.

@@ -14,6 +14,18 @@ This skill is not limited to browser or web QA. It covers local/native apps, Pyt
 
 For large projects, do not think in isolated feature boxes. Always consider the product goal, USP, cross-feature journeys, interfaces, data/contracts, regressions, and what is still missing for the whole software to succeed.
 
+## Step Banner
+
+When this skill starts, first give the user one or two plain-language sentences
+in the user's language: which step this is, what happens now, why it matters
+(one benefit or avoided risk), and what comes next. Keep it to two sentences;
+do not expand it into a tutorial.
+
+> Beispiel: "Schritt 6 von 7 — Qualitätsprüfung: Wir prüfen die Software jetzt
+> Punkt für Punkt gegen die ursprünglichen Prüfkriterien — so sehen wir
+> objektiv, ob alles Versprochene funktioniert. Erst danach ist ein Release
+> freigegeben."
+
 ## Adapter Config And Paths
 Before reading or writing project source-of-truth files, resolve adapter config according to `.claude/rules/adapter-config.md`.
 
@@ -275,7 +287,8 @@ Do not mark a feature `Approved` unless recorded evidence exists, such as test r
 
 ## Handoff
 Before ending, preserve only durable unfinished or blocked continuation work in
-`tasks/INDEX.md` through `/csk-start`; do not create same-turn task churn.
+`tasks/INDEX.md` through `/csk-start` (show proposed rows as `PENDING-AUTH` and
+ask once); do not create same-turn task churn.
 Repository files are authoritative, never chat memory.
 
 If release-ready:
@@ -285,6 +298,10 @@ If bugs remain:
 > "Found [N] bugs. Status remains In Review. Continue with the owning implementation skill recorded for each durable finding, then run `/6-csk-qa` again."
 
 ## Git Commit
+Propose after the QA results are recorded: show the exact paths and diff,
+follow the format rule in `.claude/rules/general.md`, and commit only with
+explicit approval.
+
 ```
 test(PROJ-X): Add QA results for [feature name]
 ```

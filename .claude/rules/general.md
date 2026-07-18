@@ -90,8 +90,10 @@ files conflict, report drift and repair it before advancing.
 
 ## Git and external actions
 
-- Commit format: `type(PROJ-X): description`; allowed types are `feat`, `fix`,
-  `refactor`, `test`, `docs`, `deploy`, and `chore`.
+- Commit format: `type(PROJ-X): description` for feature-bound work; allowed
+  types are `feat`, `fix`, `refactor`, `test`, `docs`, `deploy`, and `chore`.
+  Project-wide documentation or workflow changes without one owning feature may
+  use `type: description` without a scope.
 - Inspect live branch, worktree, remotes, and operation state before Git changes.
 - Verification never grants authority to commit, push, merge, create a pull
   request, tag, release, deploy, or delete a branch. Obtain explicit authority

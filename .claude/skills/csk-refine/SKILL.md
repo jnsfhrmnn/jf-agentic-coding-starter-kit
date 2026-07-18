@@ -178,7 +178,8 @@ After approval:
 
 ## Handoff
 Before ending, preserve only durable unfinished or blocked work through
-`/csk-start`; do not create same-turn task churn.
+`/csk-start` (show proposed rows as `PENDING-AUTH` and ask once); do not create
+same-turn task churn.
 
 Before choosing the handoff, read the transition and routing SSOT in
 `.claude/rules/workflow-state.md`.
