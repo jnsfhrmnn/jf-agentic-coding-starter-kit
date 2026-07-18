@@ -211,6 +211,13 @@ You do **not** need to restart or rewrite a working codebase. The adoption path 
 specifically for repositories where implementation came before consistent product
 documentation or where AI coding accumulated context debt.
 
+Structured adoption of an existing codebase is one of this kit's rarest
+features: most spec-driven kits are designed greenfield-first, and bringing an
+existing repository into them is an open problem or a manual exercise. Here it
+is a built-in, tracked workflow (`csk-adopt-plan-scaffold`) with a
+machine-verified coverage gate — the adoption cannot be marked complete while
+meaningful code is left unmapped.
+
 After the kit files have been added on a dedicated branch, the first inventory
 detects implementation, tests, configuration, and project evidence. The adoption
 skill then:
@@ -266,6 +273,32 @@ If the existing project already has `CLAUDE.md`, `AGENTS.md`, `docs/`, or
 repository, run `csk-start`, choose adoption, and follow
 `csk-adopt-plan-scaffold`. Review the resulting inventory before committing.
 
+### How this kit compares to other agentic workflow kits
+
+The core idea — guiding an AI agent from requirements to implementation with
+repository-local commands — is well established. Excellent projects cover it,
+including [github/spec-kit](https://github.com/github/spec-kit),
+[OpenSpec](https://github.com/Fission-AI/OpenSpec),
+[BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD),
+[Agent OS](https://github.com/buildermethods/agent-os), and
+[ccpm](https://github.com/automazeio/ccpm). If one of them fits your working
+style, use it. This kit's contribution is the **governance layer** that most
+of the field leaves open (comparison as of July 2026):
+
+| Capability | This kit | Typical spec-driven kits |
+|---|---|---|
+| Adoption of an existing codebase | Built-in, tracked, coverage-verified workflow | Greenfield-first; brownfield support open or manual |
+| Onboarding decision shared across clones | Git-tracked `.csk/project-state.json`, one answer for the whole team | Usually per-machine or not modeled |
+| Status transitions | Evidence-gated (`Approved` needs QA evidence, `Deployed` needs release evidence) | Quality gates exist, but statuses rarely require recorded proof |
+| Git safety | Core feature: branch gate, checkpoint commits, hard-gated `finish-branch`, no force push | Git is mostly left to the agent's defaults |
+| Claude Code + Codex | One canonical skill source, generated thin proxies | Per-tool installers that copy files |
+| Whole-product contract | `docs/master-feature.md` with system journeys and local/cloud boundaries | Constitution/PRD level, rarely a system acceptance document |
+| Technology choice | Enforced gate: no stack before the architecture step approves it | Stack-agnostic, but ordering is not enforced |
+
+The comparison is not a ranking. It explains when this kit is the right tool:
+when you need safe Git behavior for beginners, verifiable delivery states, or
+a structured takeover of a repository that already exists.
+
 ### Deterministic checks and contextual judgment
 
 The opposite of deterministic is **non-deterministic**. In this kit, deterministic
@@ -317,17 +350,39 @@ interruption point. Short-lived same-session activity does not create noise.
   locally verifiable proof are rejected.
 - Completed rows are deleted, not archived; Git history is the audit trail.
 
-### Safe Git and branch handling
+### Safe Git and branch handling — built for people who do not know Git yet
 
-- `origin` is your project repository.
-- `upstream` is the starter-kit source and is never an implicit push target.
-- Before implementation starts on the default branch, the workflow asks once
-  whether to create a feature branch.
-- Passing tests does not authorize commit, push, PR, merge, tag, deploy, or delete.
-- `finish-branch` checks dirty state, worktrees, active Git operations, base drift,
-  tests, conflicts, partial pushes, and integration reachability.
-- Force pushes are denied by default.
-- Cleanup of local and remote branches requires separate, explicit approval.
+Version control is where AI coding goes wrong most painfully: an agent commits
+half-finished work, pushes to the wrong remote, force-overwrites history, or
+deletes a branch whose work was never merged. Most agentic workflow kits treat
+Git as a side detail. This kit treats it as a first-class safety system — and
+that is exactly why beginners profit from it: **you do not need to know Git
+commands to work safely.** The workflow asks before every durable action,
+explains in one plain sentence what is about to happen, and verifies every
+step instead of assuming it worked.
+
+What the kit does for you:
+
+- The workflow asks once, before implementation starts on the default branch,
+  whether to create a feature branch — and explains why that protects you.
+- After each verified increment, it proposes a checkpoint commit so progress
+  survives a lost session. You approve; it never commits silently.
+- Passing tests does not authorize commit, push, PR, merge, tag, deploy, or
+  delete. Every external action needs your explicit yes.
+- `finish-branch` performs the entire closing sequence for you — commit, push,
+  pull request, waiting for green checks, merge, verified integration, and
+  optional cleanup — with a hard stop at every failure. Nothing is ever deleted
+  before the merge is proven to exist on your remote default branch.
+- `origin` is your project repository; `upstream` is the starter-kit source and
+  is never an implicit push target. The GitHub CLI resolution is pinned so a
+  pull request cannot silently target the template repository.
+- Force pushes are denied by default. Local and remote branch cleanup require
+  separate, explicit approval.
+- Closing a task requires typed, locally verifiable evidence — "done" is a
+  checked fact, not a feeling.
+
+Experienced developers get the same guarantees as review discipline; beginners
+get them as guardrails they never have to configure.
 
 ### Project structure
 
@@ -636,6 +691,14 @@ Adoption-Pfad ist ausdrücklich für Repositories gedacht, in denen Implementier
 vor konsistenter Produktdokumentation entstanden ist oder AI-Coding bereits
 Kontextschulden erzeugt hat.
 
+Die strukturierte Übernahme einer bestehenden Codebasis ist eines der
+seltensten Merkmale dieses Kits: Die meisten Spec-getriebenen Kits sind
+Greenfield-first gedacht — ein bestehendes Repository hineinzubringen ist dort
+ein offenes Problem oder Handarbeit. Hier ist es ein eingebauter, getrackter
+Workflow (`csk-adopt-plan-scaffold`) mit maschinell geprüftem Coverage-Gate:
+Die Adoption kann nicht als abgeschlossen markiert werden, solange relevanter
+Code unzugeordnet bleibt.
+
 Nach dem Hinzufügen der Kit-Dateien auf einem eigenen Branch erkennt die erste
 Inventur Implementierung, Tests, Konfiguration und Projektnachweise. Der
 Adoption-Skill:
@@ -691,6 +754,35 @@ Inhalte bewusst zusammengeführt und nicht überschrieben. Danach Repository öf
 `csk-start` ausführen, Adoption wählen und `csk-adopt-plan-scaffold` folgen. Die
 Inventur vor dem Commit prüfen.
 
+### Wie sich das Kit von anderen agentischen Workflow-Kits unterscheidet
+
+Die Kernidee — einen AI-Agenten mit repository-lokalen Kommandos von den
+Anforderungen bis zur Implementierung zu führen — ist etabliert. Hervorragende
+Projekte decken sie ab, darunter
+[github/spec-kit](https://github.com/github/spec-kit),
+[OpenSpec](https://github.com/Fission-AI/OpenSpec),
+[BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD),
+[Agent OS](https://github.com/buildermethods/agent-os) und
+[ccpm](https://github.com/automazeio/ccpm). Wenn eines davon zu deinem
+Arbeitsstil passt, nutze es. Der Beitrag dieses Kits ist die
+**Governance-Schicht**, die das Feld überwiegend offenlässt (Vergleich mit
+Stand Juli 2026):
+
+| Fähigkeit | Dieses Kit | Typische Spec-getriebene Kits |
+|---|---|---|
+| Übernahme bestehender Codebasen | Eingebauter, getrackter, coverage-geprüfter Workflow | Greenfield-first; Brownfield offen oder Handarbeit |
+| Onboarding-Entscheidung für alle Klone | Git-getrackt in `.csk/project-state.json`, eine Antwort fürs ganze Team | Meist pro Rechner oder gar nicht modelliert |
+| Status-Übergänge | Evidence-gekoppelt (`Approved` braucht QA-Beleg, `Deployed` Release-Beleg) | Quality-Gates ja, aber Status selten mit Beleg-Pflicht |
+| Git-Sicherheit | Kernfeature: Branch-Gate, Checkpoint-Commits, hart gegateter `finish-branch`, kein Force-Push | Git bleibt meist den Agent-Defaults überlassen |
+| Claude Code + Codex | Eine kanonische Skill-Quelle, generierte dünne Proxies | Installer, die pro Tool Kopien erzeugen |
+| Ganzprodukt-Vertrag | `docs/master-feature.md` mit System-Journeys und Local/Cloud-Grenzen | Constitution/PRD-Ebene, selten ein System-Abnahme-Dokument |
+| Technologie-Wahl | Erzwungenes Gate: kein Stack vor der Architektur-Freigabe | Stack-agnostisch, aber die Reihenfolge wird nicht erzwungen |
+
+Der Vergleich ist kein Ranking. Er erklärt, wann dieses Kit das richtige
+Werkzeug ist: wenn du sicheres Git-Verhalten für Anfänger, nachweisbare
+Lieferzustände oder die strukturierte Übernahme eines bestehenden Repositories
+brauchst.
+
 ### Deterministisch und nicht-deterministisch
 
 Das Gegenteil von deterministisch heißt **nicht-deterministisch**.
@@ -740,17 +832,43 @@ oder ein nachgewiesener Unterbrechungspunkt ist.
 - Erledigte Zeilen werden gelöscht, nicht archiviert; die Git-Historie ist der
   Nachweis.
 
-### Sicheres Git- und Branch-Verhalten
+### Sicheres Git- und Branch-Verhalten — gebaut für Menschen ohne Git-Vorwissen
 
-- `origin` ist dein Projekt-Repository.
-- `upstream` ist die Starter-Kit-Quelle und kein implizites Push-Ziel.
+Versionierung ist die Stelle, an der AI-Coding am schmerzhaftesten schiefgeht:
+Ein Agent committet Halbfertiges, pusht zum falschen Remote, überschreibt
+Historie per Force-Push oder löscht einen Branch, dessen Arbeit nie gemerged
+wurde. Die meisten agentischen Workflow-Kits behandeln Git als Randnotiz.
+Dieses Kit behandelt es als Sicherheitssystem erster Klasse — und genau davon
+profitieren Anfänger: **Du musst keine Git-Kommandos kennen, um sicher zu
+arbeiten.** Der Workflow fragt vor jeder dauerhaften Aktion, erklärt in einem
+verständlichen Satz, was gleich passiert, und verifiziert jeden Schritt, statt
+ihn anzunehmen.
+
+Was das Kit für dich übernimmt:
+
 - Vor Implementierungsbeginn auf dem Default-Branch fragt der Workflow einmal,
-  ob ein Feature-Branch angelegt werden soll.
-- Grüne Tests erlauben nicht automatisch Commit, Push, PR, Merge, Tag oder Deploy.
-- `finish-branch` prüft Dirty State, Worktrees, laufende Git-Operationen, Base Drift,
-  Tests, Konflikte, Teil-Pushes und tatsächliche Integration.
-- Force-Push ist standardmäßig gesperrt.
-- Lokales und entferntes Branch-Löschen brauchen getrennte Freigaben.
+  ob ein Feature-Branch angelegt werden soll — und erklärt, warum dich das
+  schützt.
+- Nach jedem verifizierten Zwischenstand schlägt er einen Checkpoint-Commit
+  vor, damit Fortschritt einen Session-Verlust überlebt. Du gibst frei;
+  committet wird nie stillschweigend.
+- Grüne Tests erlauben nicht automatisch Commit, Push, PR, Merge, Tag oder
+  Deploy. Jede externe Aktion braucht dein ausdrückliches Ja.
+- `finish-branch` erledigt die komplette Abschluss-Sequenz für dich —
+  committen, pushen, Pull Request, Warten auf grüne Checks, Merge, verifizierte
+  Integration und optionales Aufräumen — mit hartem Stopp bei jedem Fehler.
+  Gelöscht wird erst, wenn der Merge nachweislich auf dem Remote-Default-Branch
+  liegt.
+- `origin` ist dein Projekt-Repository; `upstream` ist die Starter-Kit-Quelle
+  und nie ein implizites Push-Ziel. Die GitHub-CLI-Auflösung wird gepinnt,
+  damit ein Pull Request nicht still im Template-Repository landet.
+- Force-Push ist standardmäßig gesperrt. Lokales und entferntes Branch-Löschen
+  brauchen getrennte Freigaben.
+- Ein Task wird nur mit typisierter, lokal prüfbarer Evidence geschlossen —
+  „fertig" ist ein geprüfter Fakt, kein Gefühl.
+
+Erfahrene Entwickler bekommen dieselben Garantien als Review-Disziplin;
+Anfänger bekommen sie als Leitplanken, die sie nie konfigurieren müssen.
 
 ### Öffentlich und privat
 
