@@ -212,11 +212,12 @@ specifically for repositories where implementation came before consistent produc
 documentation or where AI coding accumulated context debt.
 
 Structured adoption of an existing codebase is one of this kit's rarest
-features: most spec-driven kits are designed greenfield-first, and bringing an
-existing repository into them is an open problem or a manual exercise. Here it
-is a built-in, tracked workflow (`csk-adopt-plan-scaffold`) with a
-machine-verified coverage gate — the adoption cannot be marked complete while
-meaningful code is left unmapped.
+features: most spec-driven kits are greenfield-first. The closest the field
+gets (as of July 2026) is codebase documentation (BMAD) or community
+extensions (spec-kit) — without a verified feature mapping. Here it is a
+built-in, tracked workflow (`csk-adopt-plan-scaffold`) with a machine-verified
+coverage gate — the adoption cannot be marked complete while meaningful code
+is left unmapped.
 
 After the kit files have been added on a dedicated branch, the first inventory
 detects implementation, tests, configuration, and project evidence. The adoption
@@ -293,7 +294,7 @@ of the field leaves open. To be transparent in both directions
 | Greenfield speed | ✅ Productive in minutes; few concepts, little ceremony | Gates only pay off in projects you intend to keep |
 | Ecosystem | ✅ Large communities, multiple maintainers, fast releases, many tutorials | One maintainer |
 | Git safety | Mostly left to the agent's defaults | ✅ Core feature for people who do not know Git yet: branch gate, checkpoint commits, hard-gated `finish-branch`, no force push, explicit approval for every external action |
-| Existing codebases | Open problem or manual work | ✅ Structured, coverage-verified adoption workflow |
+| Existing codebases | Partial at best: codebase documentation (BMAD) or community extensions (spec-kit) | ✅ Adoption workflow with feature mapping and a mechanical coverage gate |
 | Delivery states | Quality gates without recorded proof | ✅ Evidence-gated: `Approved` and `Deployed` require verifiable proof |
 | Team onboarding decision | Per machine or not modeled | ✅ One Git-tracked decision that every clone and teammate reads |
 | Whole-product contract | Constitution/PRD level | ✅ `docs/master-feature.md` with system journeys and local/cloud boundaries |
@@ -699,8 +700,9 @@ Kontextschulden erzeugt hat.
 
 Die strukturierte Übernahme einer bestehenden Codebasis ist eines der
 seltensten Merkmale dieses Kits: Die meisten Spec-getriebenen Kits sind
-Greenfield-first gedacht — ein bestehendes Repository hineinzubringen ist dort
-ein offenes Problem oder Handarbeit. Hier ist es ein eingebauter, getrackter
+Greenfield-first gedacht. Am nächsten kommt das Feld dem (Stand Juli 2026) mit
+Codebasis-Dokumentation (BMAD) oder Community-Extensions (spec-kit) — ohne
+verifizierte Feature-Zuordnung. Hier ist es ein eingebauter, getrackter
 Workflow (`csk-adopt-plan-scaffold`) mit maschinell geprüftem Coverage-Gate:
 Die Adoption kann nicht als abgeschlossen markiert werden, solange relevanter
 Code unzugeordnet bleibt.
@@ -781,7 +783,7 @@ beide Richtungen (Stand Juli 2026):
 | Greenfield-Tempo | ✅ In Minuten produktiv; wenige Konzepte, wenig Zeremonie | Gates lohnen sich erst bei Projekten, die bleiben sollen |
 | Ökosystem | ✅ Große Communities, mehrere Maintainer, hohe Release-Frequenz, viele Tutorials | Ein Maintainer |
 | Git-Sicherheit | Bleibt meist den Agent-Defaults überlassen | ✅ Kernfeature für Menschen ohne Git-Vorwissen: Branch-Gate, Checkpoint-Commits, hart gegateter `finish-branch`, kein Force-Push, explizite Freigabe für jede externe Aktion |
-| Bestehende Codebasen | Offenes Problem oder Handarbeit | ✅ Strukturierter, coverage-geprüfter Adoptions-Workflow |
+| Bestehende Codebasen | Bestenfalls teilweise: Codebasis-Doku (BMAD) oder Community-Extensions (spec-kit) | ✅ Adoptions-Workflow mit Feature-Zuordnung und mechanischem Coverage-Gate |
 | Lieferzustände | Quality-Gates ohne Beleg-Pflicht | ✅ Evidence-gekoppelt: `Approved` und `Deployed` verlangen prüfbare Belege |
 | Team-Onboarding-Entscheidung | Pro Rechner oder nicht modelliert | ✅ Eine Git-getrackte Entscheidung, die jeder Klon und jedes Teammitglied liest |
 | Ganzprodukt-Vertrag | Constitution-/PRD-Ebene | ✅ `docs/master-feature.md` mit System-Journeys und Local/Cloud-Grenzen |
