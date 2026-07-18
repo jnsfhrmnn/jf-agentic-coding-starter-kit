@@ -283,21 +283,27 @@ including [github/spec-kit](https://github.com/github/spec-kit),
 [Agent OS](https://github.com/buildermethods/agent-os), and
 [ccpm](https://github.com/automazeio/ccpm). If one of them fits your working
 style, use it. This kit's contribution is the **governance layer** that most
-of the field leaves open (comparison as of July 2026):
+of the field leaves open. To be transparent in both directions
+(as of July 2026):
 
-| Capability | This kit | Typical spec-driven kits |
+| Dimension | spec-kit and the large frameworks | This kit |
 |---|---|---|
-| Adoption of an existing codebase | Built-in, tracked, coverage-verified workflow | Greenfield-first; brownfield support open or manual |
-| Onboarding decision shared across clones | Git-tracked `.csk/project-state.json`, one answer for the whole team | Usually per-machine or not modeled |
-| Status transitions | Evidence-gated (`Approved` needs QA evidence, `Deployed` needs release evidence) | Quality gates exist, but statuses rarely require recorded proof |
-| Git safety | Core feature: branch gate, checkpoint commits, hard-gated `finish-branch`, no force push | Git is mostly left to the agent's defaults |
-| Claude Code + Codex | One canonical skill source, generated thin proxies | Per-tool installers that copy files |
-| Whole-product contract | `docs/master-feature.md` with system journeys and local/cloud boundaries | Constitution/PRD level, rarely a system acceptance document |
-| Technology choice | Enforced gate: no stack before the architecture step approves it | Stack-agnostic, but ordering is not enforced |
+| Distribution and updates | ✅ Versioned CLI (`specify init`) with an upgrade path | GitHub template; no update mechanism yet — improvements do not reach existing projects automatically |
+| Agent breadth | ✅ 30+ agents (Copilot, Cursor, Gemini CLI, Windsurf, …) | Exactly two: Claude Code and Codex |
+| Greenfield speed | ✅ Productive in minutes; few concepts, little ceremony | Gates only pay off in projects you intend to keep |
+| Ecosystem | ✅ Large communities, multiple maintainers, fast releases, many tutorials | One maintainer |
+| Git safety | Mostly left to the agent's defaults | ✅ Core feature for people who do not know Git yet: branch gate, checkpoint commits, hard-gated `finish-branch`, no force push, explicit approval for every external action |
+| Existing codebases | Open problem or manual work | ✅ Structured, coverage-verified adoption workflow |
+| Delivery states | Quality gates without recorded proof | ✅ Evidence-gated: `Approved` and `Deployed` require verifiable proof |
+| Team onboarding decision | Per machine or not modeled | ✅ One Git-tracked decision that every clone and teammate reads |
+| Whole-product contract | Constitution/PRD level | ✅ `docs/master-feature.md` with system journeys and local/cloud boundaries |
+| Technology choice | Stack-agnostic, but ordering is not enforced | ✅ Enforced gate: no stack before the architecture step approves it |
 
-The comparison is not a ranking. It explains when this kit is the right tool:
-when you need safe Git behavior for beginners, verifiable delivery states, or
-a structured takeover of a repository that already exists.
+**This kit is for you if** you are a beginner who wants Git guardrails while
+learning, you are taking over a codebase that already exists, or you need
+delivery states backed by evidence. **Choose spec-kit or a similar framework
+if** you want the fastest possible greenfield start, you work in Cursor or
+Copilot, or you want a large ecosystem behind your tooling.
 
 ### Deterministic checks and contextual judgment
 
@@ -765,23 +771,28 @@ Projekte decken sie ab, darunter
 [Agent OS](https://github.com/buildermethods/agent-os) und
 [ccpm](https://github.com/automazeio/ccpm). Wenn eines davon zu deinem
 Arbeitsstil passt, nutze es. Der Beitrag dieses Kits ist die
-**Governance-Schicht**, die das Feld überwiegend offenlässt (Vergleich mit
-Stand Juli 2026):
+**Governance-Schicht**, die das Feld überwiegend offenlässt. Transparenz in
+beide Richtungen (Stand Juli 2026):
 
-| Fähigkeit | Dieses Kit | Typische Spec-getriebene Kits |
+| Dimension | spec-kit und die großen Frameworks | Dieses Kit |
 |---|---|---|
-| Übernahme bestehender Codebasen | Eingebauter, getrackter, coverage-geprüfter Workflow | Greenfield-first; Brownfield offen oder Handarbeit |
-| Onboarding-Entscheidung für alle Klone | Git-getrackt in `.csk/project-state.json`, eine Antwort fürs ganze Team | Meist pro Rechner oder gar nicht modelliert |
-| Status-Übergänge | Evidence-gekoppelt (`Approved` braucht QA-Beleg, `Deployed` Release-Beleg) | Quality-Gates ja, aber Status selten mit Beleg-Pflicht |
-| Git-Sicherheit | Kernfeature: Branch-Gate, Checkpoint-Commits, hart gegateter `finish-branch`, kein Force-Push | Git bleibt meist den Agent-Defaults überlassen |
-| Claude Code + Codex | Eine kanonische Skill-Quelle, generierte dünne Proxies | Installer, die pro Tool Kopien erzeugen |
-| Ganzprodukt-Vertrag | `docs/master-feature.md` mit System-Journeys und Local/Cloud-Grenzen | Constitution/PRD-Ebene, selten ein System-Abnahme-Dokument |
-| Technologie-Wahl | Erzwungenes Gate: kein Stack vor der Architektur-Freigabe | Stack-agnostisch, aber die Reihenfolge wird nicht erzwungen |
+| Distribution und Updates | ✅ Versionierte CLI (`specify init`) mit Upgrade-Pfad | GitHub-Template; noch kein Update-Mechanismus — Verbesserungen erreichen bestehende Projekte nicht automatisch |
+| Agenten-Breite | ✅ 30+ Agenten (Copilot, Cursor, Gemini CLI, Windsurf u. a.) | Genau zwei: Claude Code und Codex |
+| Greenfield-Tempo | ✅ In Minuten produktiv; wenige Konzepte, wenig Zeremonie | Gates lohnen sich erst bei Projekten, die bleiben sollen |
+| Ökosystem | ✅ Große Communities, mehrere Maintainer, hohe Release-Frequenz, viele Tutorials | Ein Maintainer |
+| Git-Sicherheit | Bleibt meist den Agent-Defaults überlassen | ✅ Kernfeature für Menschen ohne Git-Vorwissen: Branch-Gate, Checkpoint-Commits, hart gegateter `finish-branch`, kein Force-Push, explizite Freigabe für jede externe Aktion |
+| Bestehende Codebasen | Offenes Problem oder Handarbeit | ✅ Strukturierter, coverage-geprüfter Adoptions-Workflow |
+| Lieferzustände | Quality-Gates ohne Beleg-Pflicht | ✅ Evidence-gekoppelt: `Approved` und `Deployed` verlangen prüfbare Belege |
+| Team-Onboarding-Entscheidung | Pro Rechner oder nicht modelliert | ✅ Eine Git-getrackte Entscheidung, die jeder Klon und jedes Teammitglied liest |
+| Ganzprodukt-Vertrag | Constitution-/PRD-Ebene | ✅ `docs/master-feature.md` mit System-Journeys und Local/Cloud-Grenzen |
+| Technologie-Wahl | Stack-agnostisch, aber Reihenfolge nicht erzwungen | ✅ Erzwungenes Gate: kein Stack vor der Architektur-Freigabe |
 
-Der Vergleich ist kein Ranking. Er erklärt, wann dieses Kit das richtige
-Werkzeug ist: wenn du sicheres Git-Verhalten für Anfänger, nachweisbare
-Lieferzustände oder die strukturierte Übernahme eines bestehenden Repositories
-brauchst.
+**Dieses Kit ist für dich, wenn** du als Anfänger Git-Leitplanken willst,
+während du nebenbei lernst, wenn du eine bestehende Codebasis übernimmst oder
+wenn du Lieferzustände mit Belegen brauchst. **Wähle spec-kit oder ein
+ähnliches Framework, wenn** du den schnellstmöglichen Greenfield-Start willst,
+in Cursor oder Copilot arbeitest oder ein großes Ökosystem hinter deinem
+Tooling haben möchtest.
 
 ### Deterministisch und nicht-deterministisch
 
