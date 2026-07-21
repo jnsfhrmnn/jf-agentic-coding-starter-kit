@@ -17,6 +17,25 @@ paths:
 - Document required environment variables with dummy values only.
 - Treat public/client-exposed variables as non-secret.
 
+## Credential Intake Workflow
+- Every credential the product needs — API keys, tokens, FTP/SFTP logins,
+  database passwords, SMTP accounts, webhook secrets — lives only in the local
+  ignored env file (`.env.local` or the stack's documented equivalent), never
+  in code, configuration, skills, documentation, commits, or chat.
+- When a feature introduces a credential, add the variable to the tracked
+  `.env.local.example` with a dummy value and a one-line comment explaining
+  what it is and where the user gets it. The example file stays tracked; never
+  gitignore it.
+- Never ask the user to paste a secret value into the chat, and never write a
+  real secret value yourself. Guide the user step by step instead:
+  1. Copy `.env.local.example` to `.env.local` (it stays ignored automatically).
+  2. Open `.env.local` in a local editor, outside the chat.
+  3. Replace the dummy value after the variable name and save the file.
+  4. Never commit, screenshot, or paste real values anywhere.
+- Afterwards verify only that the variable is set — a presence or non-dummy
+  check through the project's config loading. Never print, log, echo, or
+  round-trip the actual value.
+
 ## Data Locality And Privacy
 - For any pipeline, classify whether data is processed offline/local, online/cloud, or hybrid according to `docs/architecture.md`.
 - Do not send prompts, files, embeddings, logs, telemetry, caches, intermediate artifacts, model outputs, identifiers, secrets, or sensitive payloads across a trust boundary unless architecture explicitly approves it.

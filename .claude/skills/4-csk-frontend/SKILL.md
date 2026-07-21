@@ -58,7 +58,7 @@ If the adapter config provides alternate paths, use those paths exactly and do n
 7. Read `.claude/rules/workflow-state.md` and `.claude/rules/loop-policy.md`.
 8. Read `features/INDEX.md`.
 9. Read the referenced feature spec, including the Tech Design section.
-10. Read `.claude/rules/frontend.md` and `.claude/rules/general.md`.
+10. Read `.claude/rules/frontend.md`, `.claude/rules/security.md`, and `.claude/rules/general.md`.
 11. Inspect the repository with `rg --files` or `git ls-files`.
 
 ## Implementation Gate

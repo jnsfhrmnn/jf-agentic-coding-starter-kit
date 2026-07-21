@@ -440,6 +440,22 @@ git grep -n -I -E "(password|token|secret|api[_-]?key)"
 Never assume `.gitignore` can remove a secret that was already committed. Rotate
 exposed credentials and clean Git history before publication.
 
+#### Where do my passwords and API keys go?
+
+Every credential your product needs — API keys, FTP or database logins, mail
+accounts — belongs in one place: your local `.env.local` file, which Git
+ignores automatically. The workflow never asks you to paste a secret into the
+chat. Instead, when a feature needs a credential, the agent adds a placeholder
+to the tracked `.env.local.example` and guides you:
+
+1. Copy `.env.local.example` to `.env.local` (it stays ignored automatically).
+2. Open `.env.local` in a normal local editor — not in the chat.
+3. Replace the dummy value after the variable name and save.
+4. Never commit, screenshot, or paste real values anywhere.
+
+Afterwards the agent only checks that the variable is set — it never reads the
+value back, prints it, or logs it.
+
 ### Validation for maintainers
 
 ```bash
@@ -892,6 +908,23 @@ Notizen. Trotzdem vor jedem öffentlichen Push Status und Staged Diff prüfen.
 
 Eine bereits committete Zugangsinformation wird durch `.gitignore` nicht entfernt.
 In diesem Fall Zugang rotieren und die Git-Historie vor Veröffentlichung bereinigen.
+
+#### Wohin mit meinen Passwörtern und API-Keys?
+
+Jede Zugangsinformation, die dein Produkt braucht — API-Keys, FTP- oder
+Datenbank-Logins, Mail-Konten — gehört an genau einen Ort: in deine lokale
+`.env.local`-Datei, die Git automatisch ignoriert. Der Workflow bittet dich
+nie, ein Geheimnis in den Chat einzufügen. Stattdessen legt der Agent, sobald
+ein Feature eine Zugangsinformation braucht, einen Platzhalter in der
+getrackten `.env.local.example` an und leitet dich an:
+
+1. Kopiere `.env.local.example` zu `.env.local` (bleibt automatisch ignoriert).
+2. Öffne `.env.local` in einem normalen lokalen Editor — nicht im Chat.
+3. Ersetze den Platzhalter-Wert hinter dem Variablennamen und speichere.
+4. Committe, screenshotte oder poste echte Werte niemals.
+
+Danach prüft der Agent nur noch, ob die Variable gesetzt ist — er liest den
+Wert nie zurück, gibt ihn nie aus und loggt ihn nie.
 
 ### Häufige Fragen
 
