@@ -151,6 +151,18 @@ class WorkflowContractTests(unittest.TestCase):
         csk_start = read(".claude/skills/csk-start/SKILL.md")
         self.assertIn("VERSION file", csk_start, "csk-start board does not surface the kit version")
 
+    def test_non_feature_taxonomy_is_anchored_in_code_and_skill(self) -> None:
+        taxonomy = (
+            "cross-cutting", "generated", "historical", "non-product",
+            "resolved", "superseded", "tooling-only", "vendored",
+        )
+        helper = read(".claude/skills/csk-start/scripts/csk_start.py")
+        skill = read(".claude/skills/csk-adopt-plan-scaffold/SKILL.md")
+        for name in taxonomy:
+            with self.subTest(klass=name):
+                self.assertIn(f'"{name}"', helper, "class missing in csk_start.py")
+                self.assertIn(f"`{name}`", skill, "class missing in adoption skill")
+
     def test_removed_transport_concepts_have_no_active_references(self) -> None:
         forbidden = (
             "us" + "crx",
