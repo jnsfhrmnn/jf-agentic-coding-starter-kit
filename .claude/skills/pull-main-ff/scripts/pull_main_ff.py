@@ -227,9 +227,13 @@ def main(argv: list[str] | None = None) -> int:
     if mode == "B" and outgoing > 0:
         raise GitError(
             f"Blocked: the worker branch '{branch}' has {outgoing} local "
-            f"commit(s) that are not on origin/{base} yet. Integrate that "
-            "work through a pull request first (finish-branch), THEN "
-            "re-sync. No silent merge was performed. Nothing was changed."
+            f"commit(s) that are not on origin/{base}. Two possible causes: "
+            "the work was not merged yet - integrate it through a pull "
+            "request first (finish-branch), THEN re-sync. Or the pull "
+            "request was squash- or rebase-merged, which breaks the "
+            "fast-forward chain - then ask the user how to proceed instead "
+            "of forcing anything. No silent merge was performed. Nothing "
+            "was changed."
         )
 
     if mode == "A" and incoming == 0:
@@ -321,10 +325,15 @@ def main(argv: list[str] | None = None) -> int:
     # Mode B: fast-forward-push the worker branch so the remote ref follows.
     # This is a plain push (never force) and also restores a remote ref the
     # host auto-deleted after the pull-request merge.
-    remote_ref_before = run_git(
-        ["-C", repo, "ls-remote", "--heads", "origin", f"refs/heads/{branch}"],
-        "The remote refs could not be listed.",
-    )
+    # The pre-push probe only decides whether to report a healed remote ref;
+    # if it fails, continue - the push itself gives the authoritative error.
+    try:
+        remote_ref_before = run_git(
+            ["-C", repo, "ls-remote", "--heads", "origin", f"refs/heads/{branch}"],
+            "The remote refs could not be listed.",
+        )
+    except GitError:
+        remote_ref_before = "unknown"
     push = subprocess.run(
         ["git", "-C", repo, "push", "origin", branch],
         capture_output=True,

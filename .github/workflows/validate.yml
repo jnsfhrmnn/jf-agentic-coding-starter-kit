@@ -46,7 +46,10 @@ jobs:
         run: |
           python -m py_compile \
             .claude/skills/csk-start/scripts/csk_start.py \
-            .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py
+            .claude/skills/csk-start/scripts/csk_session_guard.py \
+            .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py \
+            .claude/skills/pull-main-ff/scripts/pull_main_ff.py \
+            .claude/skills/create-worker-worktree/scripts/create_worker_worktree.py
 
       - name: Test startup, state, and task contracts
         run: python .claude/skills/csk-start/scripts/test_csk_start.py
@@ -56,6 +59,9 @@ jobs:
 
       - name: Test Claude-to-Codex proxy synchronization
         run: python .claude/skills/claude-skill-proxy-sync/scripts/test_sync_claude_skill_proxies.py
+
+      - name: Test context-sensitive origin sync scenarios
+        run: python .claude/skills/pull-main-ff/scripts/test_pull_main_ff.py
 
       - name: Verify generated Codex proxies are current
         run: python .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py --repo . --json

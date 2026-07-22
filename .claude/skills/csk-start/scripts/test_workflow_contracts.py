@@ -143,7 +143,7 @@ class WorkflowContractTests(unittest.TestCase):
         version = read("VERSION").strip()
         self.assertRegex(version, r"^\d+\.\d+\.\d+$")
         changelog = read("CHANGELOG.md")
-        top_entry = re.search(r"^## (\d+\.\d+\.\d+) - \d{4}-\d{2}-\d{2}$", changelog, flags=re.M)
+        top_entry = re.search(r"^## (\d+\.\d+\.\d+) - \d{4}-\d{2}-\d{2}\r?$", changelog, flags=re.M)
         self.assertIsNotNone(top_entry, "CHANGELOG.md has no version entry")
         self.assertEqual(version, top_entry.group(1), "VERSION != top CHANGELOG entry")
         readme = read("README.md")

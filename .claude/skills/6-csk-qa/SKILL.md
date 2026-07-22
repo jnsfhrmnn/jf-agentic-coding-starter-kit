@@ -17,9 +17,11 @@ For large projects, do not think in isolated feature boxes. Always consider the 
 ## Step Banner
 
 When this skill starts, first give the user one or two plain-language sentences
-in the user's language: which step this is, what happens now, why it matters
-(one benefit or avoided risk), and what comes next. Keep it to two sentences;
-do not expand it into a tutorial.
+in the user's language: which step this is, what happens now, why it comes now
+(one benefit or avoided risk of doing it at this point), what comes next, and
+which user approval this step will ask for before anything is saved,
+committed, or released. Keep it to at most three sentences; do not expand it
+into a tutorial.
 
 > Beispiel: "Schritt 6 von 7 — Qualitätsprüfung: Wir prüfen die Software jetzt
 > Punkt für Punkt gegen die ursprünglichen Prüfkriterien — so sehen wir

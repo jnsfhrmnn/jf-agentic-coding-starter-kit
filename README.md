@@ -206,7 +206,8 @@ the kit asks, before the architecture step, whether all currently known
 features are captured. Second, QA at the end verifies the software against the
 same acceptance criteria written in step 2—so "done" is an objective,
 traceable check instead of a feeling. Every numbered workflow skill also opens
-with one or two plain sentences explaining why its step happens now.
+with a short plain-language banner explaining why its step comes now, what
+follows, and which approval it will ask for.
 
 ### Why this also professionalizes an existing project
 
@@ -513,6 +514,7 @@ value back, prints it, or logs it.
 python .claude/skills/csk-start/scripts/test_csk_start.py
 python .claude/skills/csk-start/scripts/test_workflow_contracts.py
 python .claude/skills/claude-skill-proxy-sync/scripts/test_sync_claude_skill_proxies.py
+python .claude/skills/pull-main-ff/scripts/test_pull_main_ff.py
 python .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py --repo . --json
 ```
 
@@ -755,8 +757,9 @@ klassische Änderungskosten-Daten: grob 10–100x). Deshalb fragt das Kit vor de
 Architektur-Schritt, ob alle bekannten Features erfasst sind. Zweitens: Die
 Qualitätsprüfung am Ende testet gegen genau die Prüfkriterien aus Schritt 2 —
 „fertig" ist damit eine objektive, nachvollziehbare Prüfung statt eines
-Gefühls. Jeder nummerierte Workflow-Skill beginnt zudem mit ein bis zwei
-Sätzen, warum sein Schritt gerade jetzt kommt.
+Gefühls. Jeder nummerierte Workflow-Skill beginnt zudem mit einem kurzen
+Klartext-Banner: warum sein Schritt gerade jetzt kommt, was danach folgt und
+welche Freigabe er abfragen wird.
 
 ### Warum das Kit auch bestehende Projekte professionalisiert
 
