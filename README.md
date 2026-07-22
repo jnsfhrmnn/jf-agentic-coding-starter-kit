@@ -1,6 +1,7 @@
 # JF Agentic Coding Starter Kit
 
 [![Validation](https://github.com/jnsfhrmnn/jf-agentic-coding-starter-kit/actions/workflows/validate.yml/badge.svg)](https://github.com/jnsfhrmnn/jf-agentic-coding-starter-kit/actions/workflows/validate.yml)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](CHANGELOG.md)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-6B4FBB)](https://docs.anthropic.com/en/docs/claude-code/getting-started)
 [![OpenAI Codex](https://img.shields.io/badge/OpenAI_Codex-compatible-111111)](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan)
@@ -419,18 +420,32 @@ LEVEL 3 - Real parallel work
 At level 3 one session is the **orchestrator** on `main`; every other agent
 is a **worker** in its own folder. The cycle: work in parallel, the worker
 integrates through `finish-branch` (pull request, green checks, real merge
-commit - the protected worker branch is re-synced, never deleted), the
-orchestrator updates `main` through `pull-main-ff` (fast-forward only, with a
-merge-commit gate that stops anything that bypassed the pull-request door).
+commit - the protected worker branch is never deleted), then both sides run
+the same context-sensitive sync command `pull-main-ff`: on `main` it pulls
+fast-forward-only, on the worker branch it re-syncs onto the new `main` and
+updates the remote ref - with a merge-commit gate that stops anything that
+bypassed the pull-request door, and a fail-closed stop when the worker still
+carries unmerged commits.
 Memory hook: **one conductor, many musicians - and back to `main` only
 through the door (PR), never through the window (direct push).** The full
 beginner walkthrough lives in [docs/git-basics.md](docs/git-basics.md).
+
+### Kit version: always visible
+
+The kit has no automatic update mechanism yet, so every project must be able
+to tell which kit state it carries. The single source of truth is the root
+`VERSION` file (semantic versioning); `CHANGELOG.md` documents what each
+version changed, and `csk-start` shows the version at every session start.
+The contract tests fail when `VERSION`, the changelog's top entry, and the
+README badge disagree - the version cannot silently drift.
 
 ### Project structure
 
 ```text
 .
 |-- README.md                         Beginner guide in English and German
+|-- VERSION                           Canonical kit version (semver)
+|-- CHANGELOG.md                      What each kit version changed
 |-- REQUIREMENTS.md                   Tools, versions, checks, troubleshooting
 |-- CLAUDE.md                         Shared Claude workflow entry point
 |-- AGENTS.md                         Codex entry point and compatibility rules
@@ -963,13 +978,26 @@ STUFE 3 — Echtes paralleles Arbeiten
 Auf Stufe 3 ist eine Session der **Orchestrator** auf `main`; jeder weitere
 Agent ist ein **Worker** im eigenen Ordner. Der Zyklus: parallel arbeiten,
 der Worker integriert über `finish-branch` (Pull Request, grüne Checks,
-echter Merge-Commit — der geschützte Worker-Branch wird nachgezogen, nie
-gelöscht), der Orchestrator zieht `main` über `pull-main-ff` nach (nur
-Fast-Forward, mit einem Merge-Commit-Gate, das alles stoppt, was an der
-Pull-Request-Tür vorbei wollte). Merksatz: **Ein Dirigent, viele Musiker —
+echter Merge-Commit — der geschützte Worker-Branch wird nie gelöscht), danach
+nutzen beide Seiten dasselbe kontextsensitive Sync-Kommando `pull-main-ff`:
+auf `main` pullt es nur per Fast-Forward, auf dem Worker-Branch re-synct es
+auf den neuen `main` und zieht die Remote-Ref nach — mit einem
+Merge-Commit-Gate, das alles stoppt, was an der Pull-Request-Tür vorbei
+wollte, und einem fail-closed-Stopp, wenn der Worker noch ungemergte Commits
+trägt. Merksatz: **Ein Dirigent, viele Musiker —
 und zurück auf `main` geht es nur durch die Tür (PR), nie durchs Fenster
 (Direkt-Push).** Die vollständige Anfänger-Anleitung steht in
 [docs/git-basics.md](docs/git-basics.md).
+
+### Kit-Version: immer sichtbar
+
+Das Kit hat noch keinen automatischen Update-Mechanismus — deshalb muss jedes
+Projekt erkennen können, welchen Kit-Stand es trägt. Die eine Quelle der
+Wahrheit ist die `VERSION`-Datei im Root (Semantic Versioning);
+`CHANGELOG.md` dokumentiert, was jede Version geändert hat, und `csk-start`
+zeigt die Version bei jedem Session-Start. Die Contract-Tests schlagen fehl,
+wenn `VERSION`, der oberste Changelog-Eintrag und das README-Badge
+voneinander abweichen — die Version kann nicht still driften.
 
 ### Öffentlich und privat
 

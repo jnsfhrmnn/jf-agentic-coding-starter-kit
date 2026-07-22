@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -137,6 +138,18 @@ class WorkflowContractTests(unittest.TestCase):
                 self.assertIn(f".claude/skills/{name}/SKILL.md", proxy)
                 self.assertNotIn(str(REPO), proxy)
                 self.assertNotIn("C:\\Users\\", proxy)
+
+    def test_kit_version_is_declared_and_cannot_drift(self) -> None:
+        version = read("VERSION").strip()
+        self.assertRegex(version, r"^\d+\.\d+\.\d+$")
+        changelog = read("CHANGELOG.md")
+        top_entry = re.search(r"^## (\d+\.\d+\.\d+) - \d{4}-\d{2}-\d{2}$", changelog, flags=re.M)
+        self.assertIsNotNone(top_entry, "CHANGELOG.md has no version entry")
+        self.assertEqual(version, top_entry.group(1), "VERSION != top CHANGELOG entry")
+        readme = read("README.md")
+        self.assertIn(f"version-{version}-", readme, "README version badge != VERSION")
+        csk_start = read(".claude/skills/csk-start/SKILL.md")
+        self.assertIn("VERSION file", csk_start, "csk-start board does not surface the kit version")
 
     def test_removed_transport_concepts_have_no_active_references(self) -> None:
         forbidden = (

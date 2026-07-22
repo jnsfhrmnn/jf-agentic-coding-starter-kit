@@ -54,8 +54,12 @@ Git state.
   integrate through `/finish-branch` with a real merge commit and are then
   re-synced onto the new default branch - never deleted, not even on request
   inside a finish run.
-- The orchestrator updates its local default branch only through
-  `/pull-main-ff` (fast-forward only, merge-commit gate).
+- `/pull-main-ff` is the one context-sensitive sync command for both sides:
+  on the default branch it fast-forwards from origin (orchestrator step); on
+  a protected worker branch it re-syncs the branch onto the new default and
+  fast-forward-pushes the remote ref. Unmerged worker commits block the
+  re-sync fail-closed and route through `/finish-branch`. The merge-commit
+  gate applies in both modes.
 
 ## Feature lifecycle
 

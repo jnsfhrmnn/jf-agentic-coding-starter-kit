@@ -186,7 +186,9 @@ every cleanup step with this re-sync so the next cycle starts clean
 
 Report the result as "protected branch integrated and re-synced (kept)". If
 any re-sync step fails, the state is "merged but re-sync incomplete" with the
-exact remaining command - the merge itself is safe.
+exact remaining command - the merge itself is safe. These steps are exactly
+what `/pull-main-ff` performs on a protected branch; recommending that skill
+for the recovery is equivalent.
 
 ## Failure matrix
 

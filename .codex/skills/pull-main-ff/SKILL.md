@@ -1,12 +1,12 @@
 ---
 name: pull-main-ff
-description: "Safely update the local default branch (main/master) strictly by fast-forward from origin after a pull-request merge. Use after a worker or feature branch was merged, when the user says the local main is behind, or in the orchestrator step of the parallel-worktree cycle. Never switches branches, never creates a merge commit, blocks on uncommitted tracked changes, and stops with a MERGE-COMMIT-GATE when the incoming commits did not arrive through a pull-request merge."
+description: "Context-sensitive safe sync with origin - one command for both sides of the worker-worktree cycle. On the default branch (main/master) it fast-forwards from origin; on a protected worker branch (*-workbench or .csk/worktrees.json) it re-syncs the branch onto the new default and fast-forward-pushes the remote ref, restoring it after host auto-delete. Use after a pull-request merge, when the user says their branch or main is behind, or as steps 3b/4 of the parallel-worktree cycle. Never switches branches, never creates a merge commit, blocks on uncommitted tracked changes and on unmerged worker commits, and stops with a MERGE-COMMIT-GATE when incoming commits bypassed the pull-request door."
 ---
 
 <!--
 CODEX-CLAUDE-SKILL-PROXY
 canonical_claude_skill: .claude/skills/pull-main-ff/SKILL.md
-contract_sha256: 016888ffccac522084dbe06ac1d2a20ff9526fc9ee99f1b757533d10f5ea24ed
+contract_sha256: 4f28c3fa02bb159c4dd74edf89e8a4b5d1b4f26e40a4235f2fc9b25f32e9a737
 source_kind: repo
 proxy_schema_version: 1
 generated_by: .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py

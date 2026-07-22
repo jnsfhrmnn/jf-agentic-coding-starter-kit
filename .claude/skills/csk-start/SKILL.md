@@ -218,6 +218,7 @@ Use this compact shape:
 ```text
 CSK START
 Repository: <path>
+Kit: v<content of the root VERSION file, or "unknown (pre-1.2.0)" when absent>
 Onboarding: <mode/status> | Scope: uncommitted/local/project-wide
 Origin: <URL or missing> | Role: project/source-template/unconfirmed
 Branch: <branch or n/a> | Working tree: clean/dirty

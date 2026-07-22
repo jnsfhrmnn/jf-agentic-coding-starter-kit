@@ -1,19 +1,20 @@
 ---
 name: pull-main-ff
-description: Safely update the local default branch (main/master) strictly by fast-forward from origin after a pull-request merge. Use after a worker or feature branch was merged, when the user says the local main is behind, or in the orchestrator step of the parallel-worktree cycle. Never switches branches, never creates a merge commit, blocks on uncommitted tracked changes, and stops with a MERGE-COMMIT-GATE when the incoming commits did not arrive through a pull-request merge.
+description: Context-sensitive safe sync with origin - one command for both sides of the worker-worktree cycle. On the default branch (main/master) it fast-forwards from origin; on a protected worker branch (*-workbench or .csk/worktrees.json) it re-syncs the branch onto the new default and fast-forward-pushes the remote ref, restoring it after host auto-delete. Use after a pull-request merge, when the user says their branch or main is behind, or as steps 3b/4 of the parallel-worktree cycle. Never switches branches, never creates a merge commit, blocks on uncommitted tracked changes and on unmerged worker commits, and stops with a MERGE-COMMIT-GATE when incoming commits bypassed the pull-request door.
 user-invocable: true
 ---
 
-# Pull Default Branch (Fast-Forward Only)
+# Sync With Origin (Fast-Forward Only, Context-Sensitive)
 
-Bring the local default branch up to date with `origin` - and nothing else.
-This is the orchestrator's step 4 in the parallel-worktree cycle and the safe
-default whenever the local `main` is behind.
+One command for both sides: the user intention is always "bring me safely up
+to date with origin" - the script detects the context itself and picks the
+safe mechanics. A command that recognizes its context beats two commands the
+user must choose between.
 
 When this skill starts, first give the user one plain-language sentence in
-the user's language, for example: "Ich hole jetzt den neuesten Stand von
-GitHub auf deinen lokalen Hauptstand — nur vorwärts, ohne irgendetwas zu
-verändern oder zu mischen."
+the user's language, for example: "Egal wo du stehst — dieses eine Kommando
+bringt dich sicher auf den neuesten Stand. Wenn es stoppt, sagt es dir warum
+und was als Nächstes zu tun ist."
 
 ## Run the bundled script only
 
@@ -21,13 +22,23 @@ verändern oder zu mischen."
 python .claude/skills/pull-main-ff/scripts/pull_main_ff.py
 ```
 
-Show the user the complete script output. The script guarantees: no branch
-switch, no merge commit (`--ff-only`), a hard stop on uncommitted tracked
-changes (untracked files are allowed), and an honest result - it
-distinguishes "already up to date" from "fast-forwarded `<sha> -> <sha>`
-(N commits)".
+Show the user the complete script output. The script detects the mode from
+the current branch:
 
-## MERGE-COMMIT-GATE
+| Context | Behaviour |
+|---|---|
+| Default branch (`main`/`master`) | Mode A: fast-forward the default branch from origin - the orchestrator step of the cycle. |
+| Protected worker branch (`*-workbench` or listed in `.csk/worktrees.json`) | Mode B: re-sync - `merge --ff-only` onto the new `origin/<base>`, then a fast-forward push so the remote ref follows (also restores a remote ref the host auto-deleted after the merge). |
+| Worker branch with local commits not yet on origin | Fail-closed stop with guidance: integrate through a pull request first (`/finish-branch`), then re-sync. No silent merge. |
+| Any other branch | Stop without changes. |
+
+Both modes guarantee: no branch switch, no merge commit, a hard stop on
+uncommitted tracked changes (untracked files are allowed), and an honest
+result - "already up to date" is distinguished from "fast-forwarded
+`<sha> -> <sha>` (N commits)" and from "local branch is ahead (unpushed
+work)".
+
+## MERGE-COMMIT-GATE (applies in both modes)
 
 If the output contains the marker `MERGE-COMMIT-GATE`, the incoming commits
 contain **no merge commit**. The expected workflow is a worker or feature
@@ -53,5 +64,7 @@ python .claude/skills/pull-main-ff/scripts/pull_main_ff.py --allow-non-merge-ff
 
 - Run any other git command or modify files in this skill.
 - Switch branches or create a merge commit.
+- Work around the unmerged-commits stop with a manual merge or push; route
+  that work through `/finish-branch`.
 - Resolve a reported divergence yourself; explain it and let the user decide
   the next step.

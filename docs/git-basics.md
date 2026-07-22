@@ -76,10 +76,19 @@ pull-request merge; afterwards the orchestrator fast-forwards its local
 1. Create the worktree            (once - it is permanent)
 2. Work in parallel               (orchestrator on main, worker in its folder)
 3. Worker: merge the PR           (green checks, real merge commit,
-                                   branch is KEPT and re-synced)
-4. Orchestrator: pull main        (fast-forward only - /pull-main-ff)
+                                   branch is KEPT)
+4. Sync both sides                (one command everywhere: /pull-main-ff -
+                                   on main it pulls fast-forward; on the
+                                   worker branch it re-syncs and updates
+                                   the remote ref)
 5. main is current again          -> continue at 2
 ```
+
+`/pull-main-ff` is deliberately **one** command for both sides: wherever you
+stand, it brings you safely up to date - and when it stops, it tells you why
+and what to do next. If your worker branch still carries commits that never
+went through a pull request, it refuses and points you to `finish-branch`
+first; nothing is merged silently.
 
 Why step 3 keeps and re-syncs the branch: after every PR merge, `main` is
 ahead of the worker branch. Because the PR used a real merge commit, the
@@ -112,6 +121,7 @@ stop below is safe - nothing has been lost when you see it.
 | Push rejected ("non-fast-forward") | The server has newer commits than you. Overwriting them would destroy someone's work. | Pull first (the agent proposes the safe way), then push again. |
 | Merge conflict | Two lines changed the same spot; Git cannot decide which version is right. | Nothing is broken. The agent shows both versions; you pick, it resolves. |
 | Red checks on a PR | Automated tests found a problem in the branch. | The merge stays blocked on purpose. Fix the finding on the branch; merge when green. |
+| "worker branch has local commits not on origin" | Your worktree carries finished work that never went through a pull request; syncing now would silently mix it. | Integrate the work through `finish-branch` (pull request, checks, merge), then run the sync again. |
 | "detached HEAD" | The session is standing on a specific save point instead of a branch - new commits would dangle. | Do not commit. The agent proposes returning to a branch or naming a rescue branch. |
 | Protected-branch notice in `finish-branch` | The branch is permanent worker infrastructure. It gets re-synced, never deleted. | Nothing to do - that is the intended behaviour. |
 
@@ -200,10 +210,19 @@ Fast-Forward nach.
 1. Worktree anlegen               (einmal — er ist dauerhaft)
 2. Parallel arbeiten              (Orchestrator auf main, Worker im eigenen Ordner)
 3. Worker: PR mergen              (grüne Checks, echter Merge-Commit,
-                                   Branch BLEIBT und wird nachgezogen)
-4. Orchestrator: main nachziehen  (nur Fast-Forward — /pull-main-ff)
+                                   Branch BLEIBT)
+4. Beide Seiten nachziehen        (überall dasselbe Kommando: /pull-main-ff —
+                                   auf main pullt es per Fast-Forward; auf dem
+                                   Worker-Branch re-synct es und zieht die
+                                   Remote-Ref nach)
 5. main ist wieder aktuell        -> weiter bei 2
 ```
+
+`/pull-main-ff` ist bewusst **ein** Kommando für beide Seiten: Egal wo du
+stehst — es bringt dich sicher auf den neuesten Stand, und wenn es stoppt,
+sagt es dir warum und was als Nächstes zu tun ist. Trägt dein Worker-Branch
+noch Commits, die nie durch einen Pull Request gegangen sind, verweigert es
+und verweist zuerst auf `finish-branch` — nichts wird still gemergt.
 
 Warum Schritt 3 den Branch behält und nachzieht: Nach jedem PR-Merge liegt
 `main` vor dem Worker-Branch. Weil mit echtem Merge-Commit gemergt wurde, ist
@@ -237,6 +256,7 @@ verloren gegangen.
 | Push abgelehnt („non-fast-forward") | Der Server hat neuere Commits als du. Überschreiben würde fremde Arbeit zerstören. | Erst pullen (der Agent schlägt den sicheren Weg vor), dann erneut pushen. |
 | Merge-Konflikt | Zwei Spuren haben dieselbe Stelle geändert; Git kann nicht entscheiden, welche Version richtig ist. | Nichts ist kaputt. Der Agent zeigt beide Versionen; du wählst, er löst auf. |
 | Rote Checks am PR | Automatische Tests haben ein Problem im Branch gefunden. | Der Merge bleibt absichtlich blockiert. Befund auf dem Branch beheben; mergen, wenn grün. |
+| „worker branch has local commits not on origin" | Dein Worktree trägt fertige Arbeit, die nie durch einen Pull Request gegangen ist; jetzt zu syncen würde sie still vermischen. | Arbeit erst über `finish-branch` integrieren (Pull Request, Checks, Merge), dann den Sync erneut ausführen. |
 | „detached HEAD" | Die Session steht auf einem einzelnen Speicherpunkt statt auf einem Branch — neue Commits würden in der Luft hängen. | Nicht committen. Der Agent schlägt vor, auf einen Branch zurückzukehren oder einen Rettungs-Branch zu benennen. |
 | Schutz-Hinweis in `finish-branch` | Der Branch ist dauerhafte Worker-Infrastruktur. Er wird nachgezogen, nie gelöscht. | Nichts zu tun — genau das ist das gewollte Verhalten. |
 
