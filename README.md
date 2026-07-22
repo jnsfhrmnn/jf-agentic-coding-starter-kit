@@ -187,6 +187,8 @@ Supporting skills:
 | `/csk-refine --master` | `$csk-refine --master` | Refine the whole-product goal and critical journeys |
 | `/review-loop` | `$review-loop` | Deep-review artifacts and disposition findings |
 | `/audit-plan-loop` | `$audit-plan-loop` | Audit and strengthen a non-trivial plan iteratively |
+| `/create-worker-worktree` | `$create-worker-worktree` | Give a second agent session its own permanent worktree and protected branch |
+| `/pull-main-ff` | `$pull-main-ff` | Update the local default branch fast-forward-only, with a merge-commit gate |
 | `/claude-skill-proxy-sync` | `$claude-skill-proxy-sync` | Create/update Codex proxies for your own local Claude skills |
 | `/csk-help` | `$csk-help` | Explain current state and the safest next step |
 
@@ -391,6 +393,39 @@ What the kit does for you:
 Experienced developers get the same guarantees as review discipline; beginners
 get them as guardrails they never have to configure.
 
+You do not need Git command knowledge, but a handful of **concepts** so the
+workflow's questions make sense. [docs/git-basics.md](docs/git-basics.md)
+covers exactly that in ten terms, explains why commit is not push, and
+translates every safety stop into plain language with the next safe step.
+
+### Working with several agent sessions in parallel
+
+Before a second agent session opens on the same repository, one question
+decides everything: *how many sessions are working right now?*
+
+```text
+LEVEL 1 - One session at a time
+  -> Work on main. No branches, no worktrees.
+
+LEVEL 2 - A second session on the SAME working copy
+  -> Risk mode: both sessions share files, index, and HEAD.
+     csk-start's session guard detects this and warns.
+
+LEVEL 3 - Real parallel work
+  -> The second agent gets its OWN PERMANENT worktree and branch
+     (create-worker-worktree) and opens its session directly in it.
+```
+
+At level 3 one session is the **orchestrator** on `main`; every other agent
+is a **worker** in its own folder. The cycle: work in parallel, the worker
+integrates through `finish-branch` (pull request, green checks, real merge
+commit - the protected worker branch is re-synced, never deleted), the
+orchestrator updates `main` through `pull-main-ff` (fast-forward only, with a
+merge-commit gate that stops anything that bypassed the pull-request door).
+Memory hook: **one conductor, many musicians - and back to `main` only
+through the door (PR), never through the window (direct push).** The full
+beginner walkthrough lives in [docs/git-basics.md](docs/git-basics.md).
+
 ### Project structure
 
 ```text
@@ -411,7 +446,8 @@ get them as guardrails they never have to configure.
 |   |-- PRD.md                        Product intent
 |   |-- master-feature.md             Whole-product contract
 |   |-- architecture.md               Approved technical decisions
-|   `-- engineering-principles.md     Quality and evidence principles
+|   |-- engineering-principles.md     Quality and evidence principles
+|   `-- git-basics.md                 Git concepts and parallel work for beginners
 |-- features/
 |   |-- INDEX.md                      Feature map and status
 |   `-- PROJ-X-name.md                Feature specifications, created as needed
@@ -898,6 +934,42 @@ Was das Kit für dich übernimmt:
 
 Erfahrene Entwickler bekommen dieselben Garantien als Review-Disziplin;
 Anfänger bekommen sie als Leitplanken, die sie nie konfigurieren müssen.
+
+Git-Kommandos musst du nicht kennen — wohl aber eine Handvoll **Begriffe**,
+damit die Fragen des Workflows Sinn ergeben.
+[docs/git-basics.md](docs/git-basics.md) erklärt genau das in zehn Begriffen,
+zeigt, warum Commit nicht Push ist, und übersetzt jeden Sicherheits-Stopp in
+Klartext samt nächstem sicheren Schritt.
+
+### Parallel arbeiten mit mehreren Agenten-Sessions
+
+Bevor eine zweite Agenten-Session auf demselben Repository aufgeht,
+entscheidet eine Frage alles: *Wie viele Sessions arbeiten gerade?*
+
+```text
+STUFE 1 — Eine Session, nacheinander
+  -> Einfach auf main arbeiten. Keine Branches, keine Worktrees.
+
+STUFE 2 — Eine zweite Session auf DERSELBEN Working-Copy
+  -> Risiko-Modus: Beide Sessions teilen sich Dateien, Index und HEAD.
+     Der Session-Wächter in csk-start erkennt das und warnt.
+
+STUFE 3 — Echtes paralleles Arbeiten
+  -> Der zweite Agent bekommt einen EIGENEN, DAUERHAFTEN Worktree mit
+     eigenem Branch (create-worker-worktree) und öffnet seine Session
+     direkt darin.
+```
+
+Auf Stufe 3 ist eine Session der **Orchestrator** auf `main`; jeder weitere
+Agent ist ein **Worker** im eigenen Ordner. Der Zyklus: parallel arbeiten,
+der Worker integriert über `finish-branch` (Pull Request, grüne Checks,
+echter Merge-Commit — der geschützte Worker-Branch wird nachgezogen, nie
+gelöscht), der Orchestrator zieht `main` über `pull-main-ff` nach (nur
+Fast-Forward, mit einem Merge-Commit-Gate, das alles stoppt, was an der
+Pull-Request-Tür vorbei wollte). Merksatz: **Ein Dirigent, viele Musiker —
+und zurück auf `main` geht es nur durch die Tür (PR), nie durchs Fenster
+(Direkt-Push).** Die vollständige Anfänger-Anleitung steht in
+[docs/git-basics.md](docs/git-basics.md).
 
 ### Öffentlich und privat
 

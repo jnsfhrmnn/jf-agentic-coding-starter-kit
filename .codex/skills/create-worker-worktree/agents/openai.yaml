@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Worker Worktree"
+  short_description: "Run the repo-local Create Worker Worktree workflow"
+  default_prompt: "Use $create-worker-worktree and follow its canonical repository-local Claude skill."

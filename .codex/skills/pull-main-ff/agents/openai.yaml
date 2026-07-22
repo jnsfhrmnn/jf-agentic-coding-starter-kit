@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pull Main Ff"
+  short_description: "Run the repo-local Pull Main Ff workflow"
+  default_prompt: "Use $pull-main-ff and follow its canonical repository-local Claude skill."

@@ -39,6 +39,24 @@ Git state.
 - A non-default branch is completed only through `/finish-branch` after QA.
   Passing checks never authorize commit, push, merge, tag, or cleanup.
 
+## Parallel agent sessions
+
+- One repository has exactly one orchestrating session working in the main
+  checkout on the default branch. Every additional agent session gets its own
+  permanent worker worktree and branch through `/create-worker-worktree` and
+  opens directly in that worktree.
+- A second session detected on the same working copy (session guard in
+  `/csk-start`) is a warned risk mode, never a permanent setup; route it to
+  `/create-worker-worktree`.
+- Worker branches are protected by name (`*-workbench`) and by registration
+  in `.csk/worktrees.json`; the name rule also holds while that config is not
+  yet committed or not visible in the current worktree. Protected branches
+  integrate through `/finish-branch` with a real merge commit and are then
+  re-synced onto the new default branch - never deleted, not even on request
+  inside a finish run.
+- The orchestrator updates its local default branch only through
+  `/pull-main-ff` (fast-forward only, merge-commit gate).
+
 ## Feature lifecycle
 
 | Current status | Allowed next status | Normal next action |

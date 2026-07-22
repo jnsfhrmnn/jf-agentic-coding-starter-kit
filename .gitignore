@@ -39,6 +39,9 @@ Thumbs.db
 # Claude Code personal settings
 .claude/settings.local.json
 
+# advisory per-working-copy session lock (machine-local, never shared)
+.csk/session.lock
+
 # Codex personal sessions and local overrides
 .codex/sessions/
 .codex/logs/

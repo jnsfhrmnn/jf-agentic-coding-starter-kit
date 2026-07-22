@@ -31,6 +31,9 @@ rules define the shared workflow; these instructions add the Codex entry point.
   remain bundled.
 - `/finish-branch` / `$finish-branch`, `/audit-plan-loop` / `$audit-plan-loop`,
   and `/review-loop` / `$review-loop` are required and must remain bundled.
+- `/create-worker-worktree` / `$create-worker-worktree` and `/pull-main-ff` /
+  `$pull-main-ff` own parallel-session worktrees and safe default-branch
+  updates; `docs/git-basics.md` is the beginner reference for both.
 
 ## Work Rules
 

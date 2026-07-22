@@ -84,7 +84,11 @@ competing next commands unless the user explicitly asks for options.
   "Why this order?" in `README.md` for the short rationale.
 - Available workflow skills: numbered skills 1–7 plus `/csk-start`,
   `/csk-adopt-plan-scaffold`, `/csk-refine`, `/csk-help`, `/finish-branch`,
-  `/audit-plan-loop`, `/review-loop`, and `/claude-skill-proxy-sync`.
+  `/create-worker-worktree`, `/pull-main-ff`, `/audit-plan-loop`,
+  `/review-loop`, and `/claude-skill-proxy-sync`.
+- Git for beginners and parallel agent sessions: `docs/git-basics.md` explains
+  the needed terms, the three levels of parallel work, and the
+  orchestrator/worker worktree cycle.
 - Plan/review hardening: explain `/audit-plan-loop`, `/review-loop`, and
   `.claude/rules/loop-policy.md`.
 - Codex compatibility: `.claude/skills` is canonical and repo-local; ready Codex

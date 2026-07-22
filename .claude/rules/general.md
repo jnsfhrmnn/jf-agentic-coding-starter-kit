@@ -100,6 +100,22 @@ files conflict, report drift and repair it before advancing.
   for the external or destructive action in scope.
 - After verified work on a non-default branch, recommend `/finish-branch`.
 - Never force-push. Never push project changes to an upstream template remote.
+- Every Git approval question (branch creation, commit, push, pull request,
+  merge, deletion) includes one plain-language sentence: what is about to
+  happen, why now, and what happens if the user declines. Declining is always
+  safe and is described as safe. `docs/git-basics.md` is the shared beginner
+  reference for Git terms; point users there instead of assuming concept
+  knowledge.
+- Destructive Git techniques do not exist in this workflow: no force pushes,
+  no history rewriting on shared branches, no `--no-verify`, no blind
+  `git add -A`/`git add .` staging, and no `reset --hard` or forced branch
+  deletion on work that is not proven integrated. Do not teach them to
+  beginners as shortcuts.
+- One repository has exactly one orchestrating session on the default branch.
+  When a second agent session must work in parallel, route it to
+  `/create-worker-worktree`; the worker session opens directly in its own
+  worktree. Update the local default branch only through `/pull-main-ff`.
+  Protected worker branches from `.csk/worktrees.json` are never deleted.
 
 ## Human decisions and review
 

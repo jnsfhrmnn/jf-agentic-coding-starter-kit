@@ -106,6 +106,26 @@ Use repository copies of CSK skills. Never install or copy them into a
 user-global Claude or Codex directory. Already available global runtime skills
 may supplement the workflow but are not an installation target.
 
+Then claim the working copy with the session guard (timestamp lockfile with
+stale detection; the lock is advisory and gitignored):
+
+```text
+python .claude/skills/csk-start/scripts/csk_session_guard.py claim --label <agent>
+```
+
+Use one distinct label per session (for example `claude`, `codex`,
+`claude-2`): the guard identifies sessions by label, so two sessions sharing
+one label would not detect each other.
+
+If the guard reports `SECOND SESSION DETECTED`, another session holds this
+working copy. Warn the user in one plain sentence (two sessions in one folder
+share files, index, and HEAD - a known way to corrupt work), recommend
+`/create-worker-worktree` so this session gets its own worktree, and continue
+here only after the user confirms no other session is active (then claim with
+`--takeover`). See `docs/git-basics.md`, "The three levels of parallel work".
+A missing Python runtime skips the guard silently; it never blocks the start
+routine on its own.
+
 ### 2. Enforce the first-use gate
 
 Run `state check` before reading or creating tasks.

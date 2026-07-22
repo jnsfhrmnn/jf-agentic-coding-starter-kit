@@ -1,6 +1,6 @@
 ---
 name: finish-branch
-description: Safely complete a feature, fix, or release branch after its work is verified. Use when productive work on a non-default Git branch is ready to be intentionally committed, pushed, reviewed, merged, and optionally cleaned up; when the user asks to finish, close, merge, publish, or wrap up a branch; or when a CSK skill exits with verified branch work. Handles dirty trees, detached HEAD, worktrees, base drift, checks, pull requests, partial failures, and task closure without force-pushing or silently deleting branches.
+description: Safely complete a feature, fix, or release branch after its work is verified. Use when productive work on a non-default Git branch is ready to be intentionally committed, pushed, reviewed, merged, and optionally cleaned up; when the user asks to finish, close, merge, publish, or wrap up a branch; or when a CSK skill exits with verified branch work. Handles dirty trees, detached HEAD, worktrees, base drift, checks, pull requests, partial failures, and task closure without force-pushing or silently deleting branches. Protected worker branches from .csk/worktrees.json are never deleted; they integrate through a real merge commit and are re-synced onto the new default branch instead.
 ---
 
 # Finish Branch
@@ -13,6 +13,12 @@ When this skill starts, first give the user one or two plain-language sentences
 in the user's language explaining the step, for example: "Wir schließen jetzt
 den Arbeits-Branch kontrolliert ab — committen, prüfen, zusammenführen — damit
 nichts Ungeprüftes auf dem Hauptstand landet."
+
+Plain-language rule for the whole skill: every approval question and every
+stop is accompanied by one plain sentence in the user's language - what is
+about to happen (or what happened), why, and what happens if the user
+declines. Do not present raw Git states to a beginner without that sentence;
+`docs/git-basics.md` is the shared reference for the terms.
 
 ## Entry contract
 
@@ -37,7 +43,14 @@ Read:
 5. linked worktrees with `git worktree list --porcelain`;
 6. merge, rebase, cherry-pick, revert, bisect, or sequencer state;
 7. commits unique to the branch and its merge base with the proposed target;
-8. repository instructions, owning feature/task records, and required checks.
+8. repository instructions, owning feature/task records, and required checks;
+9. protected-branch detection: the branch is **protected** when its name ends
+   in `-workbench` (name-bound, works even before the config is committed or
+   visible in this worktree) or when it appears in `protectedBranches` /
+   belongs to a registered worker in `.csk/worktrees.json` where that file
+   exists. Record the detection ("protected worker branch detected: <name>")
+   - it changes the strategy (real merge commit required) and replaces
+   cleanup with the re-sync path below.
 
 Classify every changed path as in-scope, unrelated user work, generated output,
 secret/sensitive, or uncertain. Never stage unknown or unrelated paths.
@@ -84,6 +97,14 @@ Do not rewrite published history. Never force-push. Do not rebase, squash,
 fast-forward, or create a merge commit merely by preference; follow repository
 policy or ask the user when the choice materially affects history.
 
+**Protected worker branch:** the merge method MUST be a real merge commit
+(`--merge`) - never squash or rebase. Only a merge commit keeps the branch
+tip an ancestor of the target, which makes the later re-sync a clean
+fast-forward and lets `/pull-main-ff`'s merge-commit gate recognize the
+pull-request signature. If the user requested squash/rebase or repository
+policy forbids merge commits, stop and explain this constraint instead of
+silently switching methods.
+
 ## Phase 3: Verify before proposing mutation
 
 Run the exact project-native format, lint, type, unit, integration, build, and
@@ -105,7 +126,14 @@ Present a compact execution proposal containing:
 - exact paths to commit and proposed commit message;
 - verification evidence;
 - remote/PR/merge strategy;
-- whether local and remote cleanup are proposed.
+- whether local and remote cleanup are proposed (for a protected worker
+  branch: state that no deletion is proposed and a re-sync follows instead).
+
+Open the proposal with one plain-language sentence per proposed action so a
+user without Git knowledge can decide (for example: "Committen sichert den
+Stand lokal; Pushen lädt ihn zu deinem Projekt auf GitHub hoch; der Pull
+Request ist die kontrollierte Tür nach main."). Declining any action is safe
+and must be described as safe.
 
 Ask one consolidated approval for the exact commit, push, pull-request, and merge
 actions in scope. Treat local-branch deletion and remote-branch deletion as two
@@ -129,10 +157,36 @@ user authorizes only part, perform only that part and report the remaining state
 8. For local integration, inspect the target worktree, update it safely, perform
    the approved merge strategy, rerun integration checks, and verify reachability.
 9. Delete only explicitly approved branch targets and only after proving the
-   integration contains the finished commit.
+   integration contains the finished commit. A protected worker branch is
+   never a deletion target - not even on direct user request inside this
+   skill run; removing that protection is a separate, informed decision
+   (edit `.csk/worktrees.json` plus deliberate worktree teardown).
 
 After every external step, inspect actual state before continuing. Do not assume
 that a successful command means the hosting service completed the operation.
+
+## Protected worker branch: re-sync instead of cleanup
+
+For a protected branch, after the merge is verified on the target, replace
+every cleanup step with this re-sync so the next cycle starts clean
+(worktree and branch are permanent infrastructure):
+
+1. In the worker worktree: confirm `git status --porcelain` is clean; a dirty
+   worker tree blocks the re-sync (report, never stash or reset).
+2. `git fetch <remote> <target>` and `git merge --ff-only <remote>/<target>`.
+   Because the merge used a real merge commit, this MUST fast-forward. If it
+   does not, stop and report the divergence - no force, no normal merge.
+3. Push the branch (a fast-forward push - no force). If the host auto-deleted
+   the head branch after the merge ("automatically delete head branches"),
+   this same push restores the remote ref; note it in the report and
+   recommend disabling that host setting for repositories with worker
+   branches (change it only with explicit user approval).
+4. Verify: worktree still registered, local branch tip equals
+   `<remote>/<target>`, remote ref exists with the same tip.
+
+Report the result as "protected branch integrated and re-synced (kept)". If
+any re-sync step fails, the state is "merged but re-sync incomplete" with the
+exact remaining command - the merge itself is safe.
 
 ## Failure matrix
 
@@ -150,6 +204,9 @@ that a successful command means the hosting service completed the operation.
   only with authority, never guess conflict intent.
 - **Merge succeeds but cleanup fails:** report integration as complete and
   cleanup as incomplete; never retry destructive deletion broadly.
+- **Protected-branch re-sync fails:** report the merge as safe and the
+  re-sync as incomplete with the exact remaining command; never fall back to
+  deleting or force-updating the protected branch.
 - **Multiple worktrees:** operate in the worktree that owns each checked-out
   branch; never delete a branch still checked out anywhere.
 - **Network or host unavailable:** preserve a commit-only handoff and one durable
@@ -173,6 +230,9 @@ the exact next action and blocker.
 ## Completion report
 
 Report branch, target, committed SHA, pushed SHA, pull-request URL/state, check
-result, integration SHA, local/remote cleanup state, task/feature bookkeeping,
-and any remaining risk. Use `not requested`, `not applicable`, or `incomplete`
-instead of implying an action happened.
+result, integration SHA, local/remote cleanup state (or the protected-branch
+re-sync state), task/feature bookkeeping, and any remaining risk. Use
+`not requested`, `not applicable`, or `incomplete` instead of implying an
+action happened. Close with one plain-language sentence stating what is now
+true (for example: "Deine Arbeit liegt jetzt nachweislich auf main; der
+Arbeits-Branch wurde aufgeräumt / bleibt als Dauer-Branch bestehen.").

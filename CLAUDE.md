@@ -34,8 +34,9 @@ reduced to one fixed algorithm. The opposite of deterministic is
   canonical skill or changing its trigger/interface metadata. Users can use the
   same skill to sync their own repository-local additions.
 - Required workflow skills include numbered steps 1–7, `/csk-start`,
-  `/csk-adopt-plan-scaffold`, `/finish-branch`, `/audit-plan-loop`,
-  `/review-loop`, `/csk-refine`, and `/csk-help`.
+  `/csk-adopt-plan-scaffold`, `/finish-branch`, `/create-worker-worktree`,
+  `/pull-main-ff`, `/audit-plan-loop`, `/review-loop`, `/csk-refine`, and
+  `/csk-help`.
 
 ## Core workflow rules
 

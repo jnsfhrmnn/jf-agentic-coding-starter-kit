@@ -1,12 +1,12 @@
 ---
 name: finish-branch
-description: "Safely complete a feature, fix, or release branch after its work is verified. Use when productive work on a non-default Git branch is ready to be intentionally committed, pushed, reviewed, merged, and optionally cleaned up; when the user asks to finish, close, merge, publish, or wrap up a branch; or when a CSK skill exits with verified branch work. Handles dirty trees, detached HEAD, worktrees, base drift, checks, pull requests, partial failures, and task closure without force-pushing or silently deleting branches."
+description: "Safely complete a feature, fix, or release branch after its work is verified. Use when productive work on a non-default Git branch is ready to be intentionally committed, pushed, reviewed, merged, and optionally cleaned up; when the user asks to finish, close, merge, publish, or wrap up a branch; or when a CSK skill exits with verified branch work. Handles dirty trees, detached HEAD, worktrees, base drift, checks, pull requests, partial failures, and task closure without force-pushing or silently deleting branches. Protected worker branches from .csk/worktrees.json are never deleted; they integrate through a real merge commit and are re-synced onto the new default branch instead."
 ---
 
 <!--
 CODEX-CLAUDE-SKILL-PROXY
 canonical_claude_skill: .claude/skills/finish-branch/SKILL.md
-contract_sha256: dc44299db7ed16f1b65392f221409d34c01fa8983ccdc7dfb378f60e3e9290c4
+contract_sha256: 0b449331000a3723ccd19b96132a18dd03bdd3c75bf96dbfb1c812a656741dec
 source_kind: repo
 proxy_schema_version: 1
 generated_by: .claude/skills/claude-skill-proxy-sync/scripts/sync_claude_skill_proxies.py
