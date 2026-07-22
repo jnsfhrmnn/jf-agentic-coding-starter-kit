@@ -1,7 +1,7 @@
 # JF Agentic Coding Starter Kit
 
 [![Validation](https://github.com/jnsfhrmnn/jf-agentic-coding-starter-kit/actions/workflows/validate.yml/badge.svg)](https://github.com/jnsfhrmnn/jf-agentic-coding-starter-kit/actions/workflows/validate.yml)
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](CHANGELOG.md)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-6B4FBB)](https://docs.anthropic.com/en/docs/claude-code/getting-started)
 [![OpenAI Codex](https://img.shields.io/badge/OpenAI_Codex-compatible-111111)](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan)

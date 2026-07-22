@@ -286,12 +286,12 @@ class CskStartTests(unittest.TestCase):
             "# Adopt scaffold\n\n| PROJ-1 | Product | Roadmap | - | 2026-07-18 |\n",
             encoding="utf-8",
         )
-        (self.repo / "README.md").write_text("# Existing product context\n", encoding="utf-8")
+        (self.repo / "context-notes.txt").write_text("Product context notes\n", encoding="utf-8")
         report = {
             "schema_version": 1,
             "feature_index": "features/INDEX.md",
             "sources": [{
-                "path": "README.md",
+                "path": "context-notes.txt",
                 "feature_ids": ["PROJ-1"],
                 "non_feature_reason": None,
             }],
@@ -303,13 +303,66 @@ class CskStartTests(unittest.TestCase):
                 self.repo,
                 ns(operation="adoption-complete", coverage_report=".csk/adoption-coverage.json"),
             )
-        report["sources"][0]["manual_relevance_reason"] = "README is the existing product contract"
+        report["sources"][0]["manual_relevance_reason"] = "Notes hold the only recorded product decisions"
         coverage_path.write_text(json.dumps(report), encoding="utf-8")
         result = CSK.command_state(
             self.repo,
             ns(operation="adoption-complete", coverage_report=".csk/adoption-coverage.json"),
         )
         self.assertEqual("complete", result["state"]["onboarding"]["adoption_status"])
+
+    def test_project_readme_is_an_inventory_candidate(self) -> None:
+        (self.repo / "README.md").write_text("# Existing product\n", encoding="utf-8")
+        candidates = {item["path"] for item in CSK.inventory(self.repo)["candidates"]}
+        self.assertIn("README.md", candidates)
+
+    def test_blanket_non_feature_reason_is_rejected(self) -> None:
+        CSK.command_state(self.repo, ns(operation="decide", mode="adopt"))
+        report_path = self.write_adoption_fixture()
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        report["sources"][0] = {
+            "path": "legacy-plan.md",
+            "feature_ids": None,
+            "non_feature_reason": "x",
+        }
+        report_path.write_text(json.dumps(report), encoding="utf-8")
+        with self.assertRaises(CSK.CskError):
+            CSK.command_state(
+                self.repo,
+                ns(operation="adoption-complete", coverage_report=".csk/adoption-coverage.json"),
+            )
+        report["sources"][0]["non_feature_reason"] = (
+            "historical: superseded by the 2026 roadmap rewrite"
+        )
+        report_path.write_text(json.dumps(report), encoding="utf-8")
+        result = CSK.command_state(
+            self.repo,
+            ns(operation="adoption-complete", coverage_report=".csk/adoption-coverage.json"),
+        )
+        self.assertEqual("complete", result["state"]["onboarding"]["adoption_status"])
+
+    def test_unmapped_inventory_candidate_blocks_completion(self) -> None:
+        CSK.command_state(self.repo, ns(operation="decide", mode="adopt"))
+        self.write_adoption_fixture()
+        (self.repo / "src").mkdir()
+        (self.repo / "src" / "engine.py").write_text("print('x')\n", encoding="utf-8")
+        with self.assertRaises(CSK.CskError) as blocked:
+            CSK.command_state(
+                self.repo,
+                ns(operation="adoption-complete", coverage_report=".csk/adoption-coverage.json"),
+            )
+        self.assertIn("unmapped inventory candidates", str(blocked.exception))
+        self.assertIn("src/engine.py", str(blocked.exception))
+
+    def test_inventory_covers_infrastructure_and_decision_files(self) -> None:
+        (self.repo / "schema.sql").write_text("CREATE TABLE t (id INT);\n", encoding="utf-8")
+        (self.repo / "deploy.yml").write_text("jobs: {}\n", encoding="utf-8")
+        (self.repo / "Dockerfile").write_text("FROM scratch\n", encoding="utf-8")
+        (self.repo / "docs").mkdir(exist_ok=True)
+        (self.repo / "docs" / "adr-001-storage.md").write_text("# ADR\n", encoding="utf-8")
+        candidates = {item["path"] for item in CSK.inventory(self.repo)["candidates"]}
+        for expected in ("schema.sql", "deploy.yml", "Dockerfile", "docs/adr-001-storage.md"):
+            self.assertIn(expected, candidates)
 
     def test_missing_completed_scaffold_can_transition_to_blocked(self) -> None:
         CSK.command_state(self.repo, ns(operation="decide", mode="adopt"))

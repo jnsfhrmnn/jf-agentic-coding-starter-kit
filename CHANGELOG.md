@@ -5,6 +5,20 @@ All notable public changes to this project are documented here.
 The current kit version lives in the root `VERSION` file; the top entry here
 must always match it.
 
+## 1.3.0 - 2026-07-22
+
+- Hardened the adoption coverage gate after an adversarial review: the file
+  inventory now also covers SQL, YAML/CI, Dockerfiles, Terraform, HTML/CSS,
+  notebooks, protobuf/GraphQL, ADR/decision/design/migration documents, and
+  the project's own README and CHANGELOG; a `non_feature_reason` must name a
+  taxonomy class plus a substantive justification, so blanket one-word
+  reasons no longer pass "assigned"; new negative tests pin the
+  unmapped-candidate and blanket-reason paths.
+- Step banners in all seven workflow skills now state why the step comes now
+  and which user approval it will ask for.
+- Added scenario tests for the context-sensitive origin sync to the local
+  and CI validation set.
+
 ## 1.2.0 - 2026-07-22
 
 - Added `docs/git-basics.md`: bilingual Git concepts for beginners, the

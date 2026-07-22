@@ -149,11 +149,16 @@ Also write `.csk/adoption-coverage.json` as machine-readable proof:
 ```
 
 Every inventoried source appears exactly once. Map it to one or more real feature
-rows, or use an empty `feature_ids` list plus a concrete
-`non_feature_reason`. A relevant source outside the deterministic inventory also
-requires a concrete `manual_relevance_reason`; this makes the LLM's semantic
-override explicit and reviewable. Never type summary counts by hand; the
-deterministic tool derives them from this report and the current inventory.
+rows, or use an empty `feature_ids` list plus a substantive
+`non_feature_reason` in the form `<class>: <specific justification>`, where
+`<class>` is one of `cross-cutting`, `generated`, `historical`, `non-product`,
+`resolved`, `superseded`, `tooling-only`, or `vendored` and the justification
+names why THIS source is not product scope (blanket one-word reasons are
+rejected mechanically). A relevant source outside the deterministic inventory
+also requires a substantive `manual_relevance_reason`; this makes the LLM's
+semantic override explicit and reviewable. Never type summary counts by hand;
+the deterministic tool derives them from this report and the current
+inventory.
 
 ## Phase 5: Verify mechanically and semantically
 

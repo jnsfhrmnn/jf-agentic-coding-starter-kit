@@ -67,33 +67,47 @@ KIT_EXCLUDED_PREFIXES = (
     "docs/kit-history/",
 )
 KIT_EXCLUDED_FILES = {
+    # Kit control files that adoption never treats as product sources. A
+    # project's own README and CHANGELOG stay IN the inventory: in adopted
+    # repositories they are often the primary product evidence.
     "AGENTS.md",
-    "CHANGELOG.md",
     "CLAUDE.md",
     "LICENSE",
-    "README.md",
     "UPSTREAM.md",
+    "VERSION",
     "docs/audits/2026-07-10-csk-kit-fix-round.md",
     "docs/audits/2026-07-10-open-large-goal-audit.md",
     "docs/audits/2026-07-11-skill-consolidation.md",
     "docs/plans/2026-07-18-csk-workflow-hardening.md",
+    "docs/git-basics.md",
     "features/README.md",
 }
 CODE_SUFFIXES = {
-    ".c", ".cc", ".cpp", ".cs", ".go", ".h", ".hpp", ".java", ".js",
-    ".jsx", ".kt", ".kts", ".lua", ".m", ".mm", ".php", ".ps1", ".py",
-    ".rb", ".rs", ".sh", ".swift", ".ts", ".tsx", ".vue", ".svelte",
+    ".c", ".cc", ".cpp", ".cs", ".css", ".go", ".graphql", ".h", ".hpp",
+    ".html", ".ipynb", ".java", ".js", ".jsx", ".kt", ".kts", ".lua", ".m",
+    ".mm", ".php", ".proto", ".ps1", ".py", ".rb", ".rs", ".scss", ".sh",
+    ".sql", ".svelte", ".swift", ".tf", ".ts", ".tsx", ".vue", ".yaml",
+    ".yml",
 }
 MANIFEST_NAMES = {
-    "CMakeLists.txt", "Cargo.toml", "Gemfile", "Makefile", "Package.swift",
-    "build.gradle", "build.gradle.kts", "composer.json", "go.mod", "package.json",
-    "pom.xml", "pyproject.toml", "requirements.txt",
+    "CMakeLists.txt", "Cargo.toml", "Containerfile", "Dockerfile", "Gemfile",
+    "Makefile", "Package.swift", "build.gradle", "build.gradle.kts",
+    "composer.json", "go.mod", "package.json", "pom.xml", "pyproject.toml",
+    "requirements.txt",
 }
 EVIDENCE_NAME_RE = re.compile(
-    r"(?:^|[-_. /])(architecture|audit|backlog|brief|plan|prd|requirements|roadmap|"
-    r"feature|features|spec|strategy|vision|workflow)(?:[-_. /]|$)",
+    r"(?:^|[-_. /])(adr|anforderung|anforderungen|api|architecture|audit|"
+    r"backlog|brief|changelog|concept|decision|decisions|design|feature|"
+    r"features|konzept|migration|migrations|pflichtenheft|plan|prd|readme|"
+    r"requirements|roadmap|schema|spec|strategy|vision|workflow)"
+    r"(?:[-_. /]|$)",
     re.IGNORECASE,
 )
+NON_FEATURE_CLASSES = {
+    "cross-cutting", "generated", "historical", "non-product", "resolved",
+    "superseded", "tooling-only", "vendored",
+}
+MIN_REASON_DETAIL = 10
 
 
 class CskError(RuntimeError):
@@ -340,6 +354,24 @@ def validate_coverage_report(repo: Path, relative: Path) -> dict[str, Any]:
                 raise CskError(
                     f"Coverage source {canonical} references missing features: {', '.join(missing_features)}"
                 )
+        else:
+            # "Assigned" must mean something: a non-feature classification
+            # needs a class from the known taxonomy plus a substantive,
+            # source-specific justification - a blanket one-character reason
+            # must not pass the gate.
+            klass, sep, detail = non_feature.strip().partition(":")
+            if (
+                not sep
+                or klass.strip().lower() not in NON_FEATURE_CLASSES
+                or len(detail.strip()) < MIN_REASON_DETAIL
+            ):
+                raise CskError(
+                    f"Coverage source {canonical} needs a substantive "
+                    "non_feature_reason of the form '<class>: <specific "
+                    "justification>' where <class> is one of "
+                    f"{', '.join(sorted(NON_FEATURE_CLASSES))} and the "
+                    f"justification has at least {MIN_REASON_DETAIL} characters"
+                )
 
     candidates = {
         item["path"] for item in inventory(repo)["candidates"]
@@ -353,9 +385,11 @@ def validate_coverage_report(repo: Path, relative: Path) -> dict[str, Any]:
         )
     for extra_source in sorted(source_paths - candidates):
         reason = source_records[extra_source].get("manual_relevance_reason")
-        if not isinstance(reason, str) or not reason.strip():
+        if not isinstance(reason, str) or len(reason.strip()) < MIN_REASON_DETAIL:
             raise CskError(
-                f"Non-inventory coverage source requires manual_relevance_reason: {extra_source}"
+                "Non-inventory coverage source requires a substantive "
+                f"manual_relevance_reason (>= {MIN_REASON_DETAIL} characters): "
+                f"{extra_source}"
             )
     inventory_digest = _sha256("\n".join(sorted(candidates)).encode("utf-8"))
     return {
